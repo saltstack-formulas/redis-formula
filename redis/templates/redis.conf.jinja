@@ -1,0 +1,77 @@
+# Redis config
+{% set redis  = pillar.get('redis', {}) -%}
+{% set vm     = redis.get('vm', {}) -%}
+daemonize yes
+
+pidfile {{ redis.get('pidfile', '/var/db/redis/redis.pid') }}
+port {{ redis.get('port', 6379) }}
+
+{% if redis['bind'] is defined %}
+bind {{ redis['bind'] }}
+{% endif -%}
+
+loglevel {{ redis.get('loglevel', 'notice') }}
+logfile {{ redis.get('logfile', '/var/log/redis/redis.log') }}
+
+{% if redis['syslog'] is defined %}
+syslog-enabled yes
+syslog-ident {{ redis['syslog']['ident'] }}
+syslog-facility {{ redis['syslog']['facility'] }}
+{% endif -%}
+
+databases {{ redis.get('database_count', 16) }}
+
+{% if redis['snapshots'] is defined %}
+{% for s in redis['snapshots'] %}
+save {{ s }}
+{% endfor %}
+{% else %}
+save 900 1
+save 300 10
+save 60 10000
+{% endif -%}
+
+rdbcompression {{ redis.get('rdbcompression', 'yes') }}
+dbfilename {{ redis.get('dbfilename', 'dump.rdb') }}
+dir {{ redis.get('root_dir', '/var/db/redis') }}
+
+slave-serve-stale-data {{ redis.get('slave-serve-state-data', 'yes') }}
+
+{% if redis['pass'] is defined %}
+requirepass {{ redis['pass'] }}
+{% endif -%}
+
+maxmemory {{ redis.get('maxmemory', 8053063680) }}
+maxmemory-policy {{ redis.get('maxmemory-policy', 'volatile-lru') }}
+maxmemory-samples {{ redis.get('maxmemory-samples', 3) }}
+
+appendonly {{ redis.('appendonly', 'no') }}
+appendfsync {{ redis.get('appendfsync', 'everysec') }}
+
+no-appendfsync-on-rewrite {{ redis.get('no-appendfsync-on-rewrite', 'no') }}
+auto-aof-rewrite-percentage {{ redis.get('auto-aof-rewrite-percentage', 100) }}
+
+auto-aof-rewrite-min-size {{ redis.get('auto-aof-rewrite-min-size', '64mb') }}
+
+slowlog-log-slower-than {{ redis.get('slowlog-log-slower-than', 10000) }}
+
+slowlog-max-len {{ redis.get('slowlog-max-len', 1024) }}
+
+vm-enabled {{ vm.get('enabled', 'no') }}
+vm-swap-file {{ vm.get('swap-file', '/tmp/redis.swap') }}
+vm-max-memory {{ vm.get('max-memory', 0) }}
+vm-page-size {{ vm.get('page-size', 32) }}
+vm-pages {{ vm.get('pages', 134217728) }}
+vm-max-threads {{ vm.get('max-threads', 4) }}
+
+############################### ADVANCED CONFIG ###############################
+
+list-max-ziplist-entries 512
+list-max-ziplist-value 64
+
+set-max-intset-entries 512
+
+zset-max-ziplist-entries 128
+zset-max-ziplist-value 64
+
+activerehashing yes

@@ -23,7 +23,7 @@ redis-init-script:
   file.managed:
     - name: /etc/init/redis-server.conf
     - template: jinja
-    - source: salt://redis/templates/upstart.conf.jinja
+    - source: salt://redis/files/upstart.conf.jinja
     - mode: 0750
     - user: root
     - group: root
@@ -76,7 +76,7 @@ redis-server:
     - name: /etc/redis/redis.conf
     - managed
     - template: jinja
-    - source: salt://redis/templates/redis.conf.jinja
+    - source: salt://redis/files/redis.conf.jinja
     - require:
       - file: redis-init-script
       - cmd: redis-old-init-disable

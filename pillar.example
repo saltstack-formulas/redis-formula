@@ -1,0 +1,4 @@
+redis:
+  home: /var/lib/redis
+  user: redis
+  port: 6777

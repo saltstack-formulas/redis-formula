@@ -45,7 +45,7 @@ maxmemory {{ redis.get('maxmemory', 8053063680) }}
 maxmemory-policy {{ redis.get('maxmemory-policy', 'volatile-lru') }}
 maxmemory-samples {{ redis.get('maxmemory-samples', 3) }}
 
-appendonly {{ redis.('appendonly', 'no') }}
+appendonly {{ redis.get('appendonly', 'no') }}
 appendfsync {{ redis.get('appendfsync', 'everysec') }}
 
 no-appendfsync-on-rewrite {{ redis.get('no-appendfsync-on-rewrite', 'no') }}

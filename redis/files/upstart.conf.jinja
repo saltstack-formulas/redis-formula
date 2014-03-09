@@ -20,5 +20,4 @@ setuid {{ user }}
 setgid {{ user }}
 
 # run redis with the correct config file for this instance
-exec /usr/local/bin/redis-server {{ conf }}
-
+exec {{ bin }} {{ conf }}

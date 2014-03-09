@@ -5,6 +5,11 @@ include:
 {% set home   = redis.get('home', '/var/lib/redis') -%}
 {% set user   = redis.get('user', 'redis') -%}
 {% set group  = redis.get('group', user) -%}
+{% if redis.get('install_from', 'source') == 'source' %}
+{% set bin    = '/usr/local/bin/redis-server' %}
+{% elif redis.get('install_from', 'source') == 'package' %}
+{% set bin    = '/usr/bin/redis-server' %}
+{% endif %}
 
 redis_group:
   group.present:
@@ -30,13 +35,14 @@ redis-init-script:
     - context:
         conf: /etc/redis/redis.conf
         user: {{ user }}
+        bin: {{ bin }}
     - require:
-      - file: get-redis
+      - sls: redis.common
 
 redis-old-init-disable:
   cmd:
     - wait
-    - name: update-rc.d redis-server remove
+    - name: update-rc.d -f redis-server remove
     - watch:
       - file: redis-init-script
 

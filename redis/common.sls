@@ -38,11 +38,13 @@ make-redis:
       - cmd: get-redis
 
 {% elif redis['install_from'] == 'package' %}
-{% set version = redis.get('version', 'None') -%}
+{% set version = redis.get('version', None) -%}
 
 install-redis:
-  pkg.install:
+  pkg.installed:
     - name: redis-server
+    {% if version %}
     - version: {{ version }}
+    {% endif %}
 
 {% endif -%}

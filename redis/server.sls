@@ -94,5 +94,3 @@ redis-server:
       - file: redis-init-script
       - cmd: redis-old-init-disable
       - file: redis-server
-    - watch:
-      - file: redis-server

@@ -1,14 +1,15 @@
 include:
   - redis.common
 
-{% set redis  = pillar.get('redis', {}) -%}
-{% set home   = redis.get('home', '/var/lib/redis') -%}
-{% set user   = redis.get('user', 'redis') -%}
-{% set group  = redis.get('group', user) -%}
+{% set redis          = pillar.get('redis', {}) -%}
+{% set config_version = redis.get('config_version', '2.6') -%}
+{% set home           = redis.get('home', '/var/lib/redis') -%}
+{% set user           = redis.get('user', 'redis') -%}
+{% set group          = redis.get('group', user) -%}
 {% if redis.get('install_from', 'source') == 'source' %}
-{% set bin    = '/usr/local/bin/redis-server' %}
+{% set bin            = '/usr/local/bin/redis-server' -%}
 {% elif redis.get('install_from', 'source') == 'package' %}
-{% set bin    = '/usr/bin/redis-server' %}
+{% set bin            = '/usr/bin/redis-server' -%}
 {% endif %}
 
 redis_group:
@@ -82,7 +83,7 @@ redis-server:
     - name: /etc/redis/redis.conf
     - managed
     - template: jinja
-    - source: salt://redis/files/redis.conf.jinja
+    - source: salt://redis/files/redis-{{ config_version }}.conf.jinja
     - require:
       - file: redis-init-script
       - cmd: redis-old-init-disable

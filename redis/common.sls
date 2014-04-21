@@ -2,8 +2,8 @@
 {% set install_from = redis.get('install_from', 'source') -%}
 
 {% if install_from == 'source' %}
-{% set version = redis.get('version', 'stable') -%}
-{% set checksum = redis.get('checksum', 'sha1=12755897666792eb9e1a0b7e4589eb1cb8e229d0') -%}
+{% set version = redis.get('version', '2.8.8') -%}
+{% set checksum = redis.get('checksum', 'sha1=d944c90d87e4cf2f382506c3e155335dd31da82e') -%}
 {% set root = redis.get('root', '/usr/local') -%}
 
 redis-dependencies:
@@ -17,7 +17,7 @@ redis-dependencies:
 get-redis:
   file.managed:
     - name: {{ root }}/redis-{{ version }}.tar.gz
-    - source: http://download.redis.io/redis-{{ version }}.tar.gz
+    - source: http://download.redis.io/releases/redis-{{ version }}.tar.gz
     - source_hash: {{ checksum }}
     - require:
       - pkg: redis-dependencies

@@ -3,7 +3,7 @@
 
 {% if install_from == 'source' %}
 {% set version = redis.get('version', '2.8.8') -%}
-{% set checksum = redis.get('checksum', 'sha1=d944c90d87e4cf2f382506c3e155335dd31da82e') -%}
+{% set checksum = redis.get('checksum', 'sha1=aa811f399db58c92c8ec5e48271d307e9ab8eb81') -%}
 {% set root = redis.get('root', '/usr/local') -%}
 
 redis-dependencies:

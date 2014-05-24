@@ -6,8 +6,6 @@ daemonize yes
 pidfile {{ redis.get('pidfile', '/var/db/redis/redis.pid') }}
 port {{ redis.get('port', 6379) }}
 
-tcp-backlog {{ redis.get('tcp-backlog', 511) }}
-
 {% if redis['bind'] is defined %}
 bind {{ redis['bind'] }}
 {% endif -%}

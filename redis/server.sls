@@ -90,7 +90,7 @@ redis-server:
       - file: redis-pid-dir
   service:
     - running
-    - require:
+    - watch:
       - file: redis-init-script
       - cmd: redis-old-init-disable
       - file: redis-server

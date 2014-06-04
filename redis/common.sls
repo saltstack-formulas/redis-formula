@@ -1,5 +1,5 @@
 {% set redis = pillar.get('redis', {}) -%}
-{% set install_from = redis.get('install_from', 'source') -%}
+{% set install_from = redis.get('install_from', 'package') -%}
 
 {% if install_from == 'source' %}
 {% set version = redis.get('version', '2.8.8') -%}

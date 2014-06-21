@@ -1,0 +1,14 @@
+{% set redis = salt['grains.filter_by']({
+    'Debian': {
+        'server': 'mysql-server',
+        'client': 'mysql-client',
+        'service': 'mysql',
+        'config': '/etc/mysql/my.cnf',
+    },
+    'RedHat': {
+        'server': 'mysql-server',
+        'client': 'mysql',
+        'service': 'mysqld',
+        'config': '/etc/my.cnf',
+    },
+}, merge=salt['pillar.get']('redis')) %}

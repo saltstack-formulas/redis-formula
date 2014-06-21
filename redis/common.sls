@@ -1,5 +1,8 @@
+{% from "redis/map.jinja" import redis with context %}
+
 {% set redis = pillar.get('redis', {}) -%}
 {% set install_from = redis.get('install_from', 'package') -%}
+
 
 {% if install_from == 'source' %}
 {% set version = redis.get('version', '2.8.8') -%}
@@ -9,9 +12,15 @@
 redis-dependencies:
   pkg.installed:
     - names:
+    {% if grains['os_family'] == 'RedHat' %}
+        - python-devel
+        - make
+        - libxml2-devel
+    {% elif grains['os_family'] == 'Debian' or 'Ubuntu' %}
         - build-essential
         - python-dev
         - libxml2-dev
+    {% endif %}
 
 ## Get redis
 get-redis:
@@ -39,10 +48,16 @@ make-redis:
 
 {% elif install_from == 'package' %}
 {% set version = redis.get('version', None) -%}
+{% if grains['os_family'] == 'RedHat' %}
+{% set pkg_name = redis.get('pkg_name', 'redis') -%}
+{% else %}
+{% set pkg_name = redis.get('pkg_name', 'redis-server') -%}
+{% endif %}
+
 
 install-redis:
   pkg.installed:
-    - name: redis-server
+    - name: {{ pkg_name }}
     {% if version %}
     - version: {{ version }}
     {% endif %}

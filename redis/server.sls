@@ -6,12 +6,15 @@ include:
 {% set home           = redis.get('home', '/var/lib/redis') -%}
 {% set user           = redis.get('user', 'redis') -%}
 {% set group          = redis.get('group', user) -%}
+
 {% if redis.get('install_from', 'source') == 'source' %}
-{% set bin            = '/usr/local/bin/redis-server' -%}
+  {% set bin          = '/usr/local/bin/redis-server' -%}
 {% elif redis.get('install_from', 'source') == 'package' %}
-{% set bin            = '/usr/bin/redis-server' -%}
+  {% set bin          = '/usr/sbin/redis-server' -%}
 {% endif %}
 
+{% if grains['os_family'] != 'RedHat' %}
+{% if install_from == 'source' %}
 redis_group:
   group.present:
     - name: {{ group }}
@@ -69,6 +72,7 @@ redis-log-dir:
     - makedirs: True
     - require:
       - user: redis_user
+
 redis-log-file:
   file.touch:
     - name: /var/log/redis
@@ -94,3 +98,14 @@ redis-server:
       - file: redis-init-script
       - cmd: redis-old-init-disable
       - file: redis-server
+
+{% endif %}
+{% elif grains['os_family'] == 'RedHat' %}
+start_redis_service:
+  service:
+    - name: redis
+    - running
+    - watch:
+      - file: /etc/redis.conf
+{% endif %}
+

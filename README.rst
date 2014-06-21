@@ -1,6 +1,8 @@
 redis
 =====
 
+# DO NOT USE YET 
+
 Formula to install and configure redis.
 
 .. note::

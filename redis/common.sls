@@ -1,12 +1,13 @@
 {% from "redis/map.jinja" import redis with context %}
 
-{% set install_from = salt['pillar.get']('redis:install_from', 'package') -%}
+
+{% set install_from   = redis.install_from|default('package') -%}
 
 
 {% if install_from == 'source' %}
-{% set version = redis.get('version', '2.8.8') -%}
-{% set checksum = redis.get('checksum', 'sha1=aa811f399db58c92c8ec5e48271d307e9ab8eb81') -%}
-{% set root = redis.get('root', '/usr/local') -%}
+{% set version = redis.version|default('2.8.8') -%}
+{% set checksum = redis.checksum|default('sha1=aa811f399db58c92c8ec5e48271d307e9ab8eb81') -%}
+{% set root = redis.root|default('/usr/local') -%}
 
 {# there is a missing config template for version 2.8.8 #}
 
@@ -23,7 +24,7 @@ redis-dependencies:
         - libxml2-dev
     {% endif %}
 
-## Get redis
+
 get-redis:
   file.managed:
     - name: {{ root }}/redis-{{ version }}.tar.gz
@@ -37,6 +38,7 @@ get-redis:
       - tar -zxvf {{ root }}/redis-{{ version }}.tar.gz -C {{ root }}
     - watch:
       - file: get-redis
+
 
 make-and-install-redis:
   cmd.wait:
@@ -54,8 +56,8 @@ make-and-install-redis:
 install-redis:
   pkg.installed:
     - name: {{ redis.pkg_name }}
-    {% if salt['pillar.get']('redis:version') is defined %}
-    - version: {{ salt['pillar.get']('redis:version') }}
+    {% if redis.version is defined %}
+    - version: {{ redis.version }}
     {% endif %}
 
 

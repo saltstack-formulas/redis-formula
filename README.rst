@@ -8,6 +8,11 @@ Formula to install and configure redis.
     See the full `Salt Formulas installation and usage instructions
     <http://docs.saltstack.com/topics/conventions/formulas.html>`_.
 
+Todo
+====
+
+* merge redis 2.4 and 2.6 templates to generic redis.conf.jinja
+
 Available states
 ================
 

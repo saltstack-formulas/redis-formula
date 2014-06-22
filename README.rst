@@ -1,8 +1,6 @@
 redis
 =====
 
-# DO NOT USE YET 
-
 Formula to install and configure redis.
 
 .. note::
@@ -25,6 +23,6 @@ Install redis only
 ``redis.server``
 ----------------
 
-Install redis and start up the service (currently, only upstart/ubuntu supported).
+Install redis and start up the service ( Ubuntu + RedHat based systems should work ).
 
-For a list of all available options, look at: `redis/templates/redis.conf.jinja`
+For a list of all available options, look at: `redis/templates/redis.{version}.conf.jinja` - also have a look at the pillar.example and map.jinja.

@@ -3,9 +3,10 @@ include:
 
 {% from "redis/map.jinja" import redis with context %}
 
-{% set install_from   = salt['pillar.get']('redis:install_from', 'package') -%}
+{% set install_from   = redis.install_from|default('package') -%}
 {% set svc_state      = salt['pillar.get']('redis:svc_state', 'running') -%}
-{% set cfg_version    = salt['pillar.get']('redis:cfg_version')|default('2.5') -%}
+{% set svc_onboot     = salt['pillar.get']('redis:svc_onboot', True) -%}
+{% set cfg_version    = salt['pillar.get']('redis:cfg_version', '2.4') -%}
 
 {% if install_from == 'source' %}
 
@@ -89,7 +90,7 @@ redis-server:
       - cmd: redis-old-init-disable
       - file: redis-server
 
-{% endif %}
+{% else %}
 
 
 redis_service:
@@ -103,9 +104,10 @@ redis_service:
   service:
     - name: {{ redis.svc_name }}
     - {{ svc_state }}
+    - enable: {{ svc_onboot }}
     - watch:
       - file: {{ redis.cfg_name }}
     - require:
       - pkg: {{ redis.pkg_name }}
 
-
+{% endif %}

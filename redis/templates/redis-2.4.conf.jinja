@@ -1,5 +1,4 @@
 # Redis configuration file 
-{% set redis  = pillar.get('redis', {}) -%}
 {% from "redis/map.jinja" import redis with context %}
 
 # Note on units: when memory size is needed, it is possible to specifiy
@@ -20,20 +19,16 @@ daemonize yes
 
 # When running daemonized, Redis writes a pid file in /var/run/redis.pid by
 # default. You can specify a custom pid file location here.
-pidfile {{ redis.get('pidfile', '/var/run/redis/redis.pid') }}
+pidfile {{ redis.pidfile|default('/var/run/redis/redis.pid') }}
 
 # Accept connections on the specified port, default is 6379.
 # If port 0 is specified Redis will not listen on a TCP socket.
-port {{ redis.get('port', 6379) }}
+port {{ redis.port|default(6379) }}
 
 # If you want you can bind a single interface, if the bind option is not
 # specified all the interfaces will listen for incoming connections.
 #
-{% if redis['bind'] is defined -%}
-bind {{ redis['bind'] }}
-{% else %}
-bind 127.0.0.1
-{% endif -%}
+bind {{ redis.bind|default('127.0.0.1') }}
 
 # Specify the path for the unix socket that will be used to listen for
 # incoming connections. There is no default, so Redis will not listen
@@ -52,13 +47,13 @@ timeout 0
 # notice (moderately verbose, what you want in production probably)
 # warning (only very important / critical messages are logged)
 #loglevel notice
-loglevel {{ redis.get('loglevel', 'notice') }}
+loglevel {{ redis.loglevel|default('notice') }}
 
 # Specify the log file name. Also 'stdout' can be used to force
 # Redis to log on the standard output. Note that if you use standard
 # output for logging but daemonize, logs will be sent to /dev/null
 #logfile /var/log/redis/redis.log
-logfile {{ redis.get('logfile', '/var/log/redis/redis.log') }}
+logfile {{ redis.logfile|default('/var/log/redis/redis.log') }}
 
 # To enable logging to the system logger, just set 'syslog-enabled' to yes,
 # and optionally update the other syslog parameters to suit your needs.
@@ -68,10 +63,10 @@ logfile {{ redis.get('logfile', '/var/log/redis/redis.log') }}
 # syslog-ident redis
 # Specify the syslog facility.  Must be USER or between LOCAL0-LOCAL7.
 # syslog-facility local0
-{% if redis['syslog'] is defined %}
+{% if redis.syslog is defined %}
 syslog-enabled yes
-syslog-ident {{ redis.get(['syslog']['ident'], 'redis') }}
-syslog-facility {{ redis.get(['syslog']['facility'], 'local0') }}
+syslog-ident {{ redis.syslog.ident|default('redis') }}
+syslog-facility {{ redis.syslog.facility|default('local0') }}
 {% endif -%}
 
 
@@ -79,7 +74,7 @@ syslog-facility {{ redis.get(['syslog']['facility'], 'local0') }}
 # a different one on a per-connection basis using SELECT <dbid> where
 # dbid is a number between 0 and 'databases'-1
 #databases 16
-databases {{ redis.get('databases', 16) }}
+databases {{ redis.databases|default('16') }}
 
 ################################ SNAPSHOTTING  #################################
 #
@@ -101,8 +96,8 @@ databases {{ redis.get('databases', 16) }}
 #save 300 10
 #save 60 10000
 
-{% if redis['snapshots'] is defined %}
-{% for s in redis['snapshots'] %}
+{% if redis.snapshots is defined %}
+{% for s in redis.snapshots -%}
 save {{ s }}
 {% endfor %}
 {% else %}
@@ -118,7 +113,7 @@ save 60 10000
 rdbcompression yes
 
 # The filename where to dump the DB
-dbfilename {{ redis.get('dbfilename', 'dump.rdb') }}
+dbfilename {{ redis.dbfilename|default('dump.rdb') }}
 
 # The working directory.
 #
@@ -129,7 +124,7 @@ dbfilename {{ redis.get('dbfilename', 'dump.rdb') }}
 # 
 # Note that you must specify a directory here, not a file name.
 # dir /var/lib/redis/
-dir {{ redis.get('db_dir', '/var/lib/redis') }}
+dir {{ redis.db_dir|default('/var/lib/redis') }}
 
 ################################# REPLICATION #################################
 
@@ -240,8 +235,8 @@ slave-serve-stale-data yes
 # output buffers (but this is not needed if the policy is 'noeviction').
 #
 # maxmemory <bytes>
-{% if redis['maxmemory'] is defined -%}
-maxmemory {{ redis.get('maxmemory') }}
+{% if redis.maxmemory is defined -%}
+maxmemory {{ redis.maxmemory }}
 {% endif %}
 
 # MAXMEMORY POLICY: how Redis will select what to remove when maxmemory
@@ -266,8 +261,8 @@ maxmemory {{ redis.get('maxmemory') }}
 # The default is:
 #
 # maxmemory-policy volatile-lru
-{% if redis['maxmemory-policy'] is defined -%}
-maxmemory-policy {{ redis.get('maxmemory-policy', 'volatile-lru') }}
+{% if redis.maxmemory_policy is defined -%}
+maxmemory-policy {{ redis.maxmemory_policy|default('volatile-lru') }}
 {% endif %}
 
 # LRU and minimal TTL algorithms are not precise algorithms but approximated
@@ -277,8 +272,8 @@ maxmemory-policy {{ redis.get('maxmemory-policy', 'volatile-lru') }}
 # using the following configuration directive.
 #
 # maxmemory-samples 3
-{% if redis['maxmemory-samples'] is defined -%}
-maxmemory-samples {{ redis.get('maxmemory-samples', 3) }}
+{% if redis.maxmemory_samples is defined -%}
+maxmemory-samples {{ redis.maxmemory_samples|default(3) }}
 {% endif %}
 
 
@@ -302,12 +297,12 @@ maxmemory-samples {{ redis.get('maxmemory-samples', 3) }}
 # log file in background when it gets too big.
 
 #Default: appendonly no
-appendonly {{ redis.get('appendonly', 'no') }}
+appendonly {{ redis.appendonly|default('no') }}
 
 # The name of the append only file (default: "appendonly.aof")
 # appendfilename appendonly.aof
-{% if redis['appendfilename'] is defined -%}
-appendfilename {{ redis.get('appendfilename', 'appendonly.aof') }}
+{% if redis.appendfilename is defined -%}
+appendfilename {{ redis.appendfilename|default('appendonly.aof') }}
 {% endif %}
 
 
@@ -332,8 +327,8 @@ appendfilename {{ redis.get('appendfilename', 'appendonly.aof') }}
 # If unsure, use "everysec".
 
 # appendfsync always
-{% if redis['appendfsync'] is defined -%}
-appendfsync {{ redis.get('appendfsync', 'everysec') }}
+{% if redis.appendfsync is defined -%}
+appendfsync {{ redis.appendfsync|default('everysec') }}
 {% else %}
 # Default:
 appendfsync everysec
@@ -358,8 +353,8 @@ appendfsync everysec
 # 
 # If you have latency problems turn this to "yes". Otherwise leave it as
 # "no" that is the safest pick from the point of view of durability.
-{% if redis['no-apendfsync-on-write'] is defined -%}
-no-appendfsync-on-rewrite {{ redis.get('no-appendfsync-on-rewrite') }}
+{% if redis.no_apendfsync_on_write is defined -%}
+no-appendfsync-on-rewrite {{ redis.no_appendfsync_on_rewrite|default('no') }}
 {% else %}
 # Default:
 no-appendfsync-on-rewrite no

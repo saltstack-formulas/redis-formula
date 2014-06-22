@@ -1,20 +1,15 @@
 include:
   - redis.common
 
-{% set redis          = pillar.get('redis', {}) -%}
-{% set config_version = redis.get('config_version', '2.6') -%}
-{% set home           = redis.get('home', '/var/lib/redis') -%}
-{% set user           = redis.get('user', 'redis') -%}
-{% set group          = redis.get('group', user) -%}
+{% set svc_state      = salt['pillar.get']('redis:svc_state', 'running') -%}
 
-{% if redis.get('install_from', 'source') == 'source' %}
-  {% set bin          = '/usr/local/bin/redis-server' -%}
-{% elif redis.get('install_from', 'source') == 'package' %}
-  {% set bin          = '/usr/sbin/redis-server' -%}
-{% endif %}
-
-{% if grains['os_family'] != 'RedHat' %}
 {% if install_from == 'source' %}
+
+{% set user           = salt['pillar.get']('redis:user', 'redis') -%}
+{% set group          = salt['pillar.get']('redis:group', user) -%}
+{% set home           = salt['pillar.get']('redis:home', '/var/lib/redis') -%}
+{% set bin            = salt['pillar.get']('redis:bin', '/usr/local/bin/redis-server') -%}
+
 redis_group:
   group.present:
     - name: {{ group }}
@@ -32,7 +27,7 @@ redis-init-script:
   file.managed:
     - name: /etc/init/redis-server.conf
     - template: jinja
-    - source: salt://redis/files/upstart.conf.jinja
+    - source: salt://redis/templates/upstart.conf.jinja
     - mode: 0750
     - user: root
     - group: root
@@ -73,21 +68,12 @@ redis-log-dir:
     - require:
       - user: redis_user
 
-redis-log-file:
-  file.touch:
-    - name: /var/log/redis
-    - mode: 644
-    - user: {{ user }}
-    - group: {{ group }}
-    - require:
-      - file: redis-log-dir
-
 redis-server:
   file:
     - name: /etc/redis/redis.conf
     - managed
     - template: jinja
-    - source: salt://redis/files/redis-{{ config_version }}.conf.jinja
+    - source: salt://redis/templates/redis-{{ cfg_version }}.conf.jinja
     - require:
       - file: redis-init-script
       - cmd: redis-old-init-disable
@@ -100,12 +86,22 @@ redis-server:
       - file: redis-server
 
 {% endif %}
-{% elif grains['os_family'] == 'RedHat' %}
-start_redis_service:
+
+
+redis_service:
+  file:
+    - name: {{ redis.cfg_name }}
+    - managed
+    - template: jinja
+    - source: salt://redis/templates/redis-{{ cfg_version }}.conf.jinja
+    - require:
+      - pkg: {{ redis.pkg_name }}
   service:
-    - name: redis
-    - running
+    - name: {{ redis.svc_name }}
+    - {{ salt['pillar.get']('redis:svc_state')|default('running') }}
     - watch:
-      - file: /etc/redis.conf
-{% endif %}
+      - file: {{ redis.cfg_name }}
+    - require:
+      - pkg: {{ redis.pkg_name }}
+
 

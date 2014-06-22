@@ -1,0 +1,142 @@
+# Redis config
+{% set redis  = pillar.get('redis', {}) -%}
+daemonize yes
+
+pidfile {{ redis.get('pidfile', '/var/db/redis/redis.pid') }}
+port {{ redis.get('port', 6379) }}
+
+{% if redis['bind'] is defined %}
+bind {{ redis['bind'] }}
+{% endif -%}
+
+{% if redis['unixsocket'] is defined %}
+unixsocket {{ redis['unixsocket'] }}
+unixsocketperm {{ redis.get('unixsocketperm', 755) }}
+{% endif -%}
+
+tcp-keepalive {{ redis.get('tcp-keepalive', 0) }}
+
+loglevel {{ redis.get('loglevel', 'notice') }}
+logfile {{ redis.get('logfile', '/var/log/redis/redis.log') }}
+
+{% if redis['syslog'] is defined %}
+syslog-enabled yes
+syslog-ident {{ redis['syslog']['ident'] }}
+syslog-facility {{ redis['syslog']['facility'] }}
+{% endif -%}
+
+databases {{ redis.get('database_count', 16) }}
+
+{% if redis['snapshots'] is defined %}
+{% for s in redis['snapshots'] %}
+save {{ s }}
+{% endfor %}
+{% else %}
+save 900 1
+save 300 10
+save 60 10000
+{% endif -%}
+
+stop-writes-on-bgsave-error {{ redis.get('stop-writes-on-bgsave-error', 'yes') }}
+
+rdbcompression {{ redis.get('rdbcompression', 'yes') }}
+rdbchecksum {{ redis.get('rdbchecksum', 'yes') }}
+
+dbfilename {{ redis.get('dbfilename', 'dump.rdb') }}
+dir {{ redis.get('root_dir', '/var/db/redis') }}
+
+{% if redis['slaveof'] is defined %}
+slaveof {{ redis['slaveof']['masterip'] }} {{ redis['slaveof']['masterport'] }}
+{% endif -%}
+
+{% if redis['masterauth'] is defined %}
+masterauth {{ redis['masterauth'] }}
+{% endif -%}
+
+slave-serve-stale-data {{ redis.get('slave-serve-state-data', 'yes') }}
+slave-read-only {{ redis.get('slave-read-only', 'yes') }}
+
+{% if redis['repl-ping-slave-period'] is defined %}
+repl-ping-slave-period {{ redis['repl-ping-slave-period'] }}
+{% endif -%}
+
+{% if redis['repl-timeout'] is defined %}
+repl-timeout {{ redis['repl-timeout'] }}
+{% endif -%}
+
+repl-disable-tcp-nodelay {{ redis.get('repl-disable-tcp-nodelay', 'no') }}
+
+{% if redis['repl-backlog-size'] is defined %}
+repl-backlog-size {{ redis['repl-backlog-size'] }}
+{% endif -%}
+
+{% if redis['repl-backlog-ttl'] is defined %}
+repl-backlog-ttl {{ redis['repl-backlog-ttl'] }}
+{% endif -%}
+
+slave-priority {{ redis.get('slave-priority', 100) }}
+
+{% if redis['min-slaves-to-write'] is defined %}
+requiremin-slaves-to-write {{ redis['min-slaves-to-write'] }}
+{% endif -%}
+
+{% if redis['min-slaves-max-lag'] is defined %}
+requiremin-slaves-max-lag {{ redis['min-slaves-max-lag'] }}
+{% endif -%}
+
+{% if redis['pass'] is defined %}
+requirepass {{ redis['pass'] }}
+{% endif -%}
+
+{% if redis['rename-command'] is defined %}
+{% for k, v in redis['rename-command'] %}
+rename-command {{ k }} {{ v }}
+{% endfor %}
+{% endif -%}
+
+{% if redis['maxclients'] is defined %}
+requiremaxclients {{ redis['maxclients'] }}
+{% endif -%}
+
+maxmemory {{ redis.get('maxmemory', 8053063680) }}
+maxmemory-policy {{ redis.get('maxmemory-policy', 'volatile-lru') }}
+maxmemory-samples {{ redis.get('maxmemory-samples', 3) }}
+
+appendonly {{ redis.get('appendonly', 'no') }}
+appendfilename {{ redis.get('appendfilename', 'appendonly.aof') }}
+appendfsync {{ redis.get('appendfsync', 'everysec') }}
+
+no-appendfsync-on-rewrite {{ redis.get('no-appendfsync-on-rewrite', 'no') }}
+auto-aof-rewrite-percentage {{ redis.get('auto-aof-rewrite-percentage', 100) }}
+
+auto-aof-rewrite-min-size {{ redis.get('auto-aof-rewrite-min-size', '64mb') }}
+
+lua-time-limit {{ redis.get('lua-time-limit', 5000) }}
+
+slowlog-log-slower-than {{ redis.get('slowlog-log-slower-than', 10000) }}
+slowlog-max-len {{ redis.get('slowlog-max-len', 128) }}
+
+notify-keyspace-events {{ redis.get('notify-keyspace-events', '""') }}
+
+############################### ADVANCED CONFIG ###############################
+
+hash-max-ziplist-entries 512
+hash-max-ziplist-value 64
+
+list-max-ziplist-entries 512
+list-max-ziplist-value 64
+
+set-max-intset-entries 512
+
+zset-max-ziplist-entries 128
+zset-max-ziplist-value 64
+
+activerehashing yes
+
+client-output-buffer-limit normal 0 0 0
+client-output-buffer-limit slave 256mb 64mb 60
+client-output-buffer-limit pubsub 32mb 8mb 60
+
+hz 10
+
+aof-rewrite-incremental-fsync yes

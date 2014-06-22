@@ -1,0 +1,23 @@
+description "Redis Server"
+author "auser"
+
+# run when the local FS becomes available
+start on local-filesystems
+stop on shutdown
+
+# Set an OOM score
+oom score 400
+
+# The default redis conf has `daemonize = yes` and will naiively fork itself.
+expect fork
+
+# Respawn unless redis dies 10 times in 5 seconds
+respawn
+respawn limit 10 5
+
+# run redis as the correct user
+setuid {{ user }}
+setgid {{ user }}
+
+# run redis with the correct config file for this instance
+exec {{ bin }} {{ conf }}

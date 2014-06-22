@@ -1,7 +1,11 @@
 include:
   - redis.common
 
+{% from "redis/map.jinja" import redis with context %}
+
+{% set install_from   = salt['pillar.get']('redis:install_from', 'package') -%}
 {% set svc_state      = salt['pillar.get']('redis:svc_state', 'running') -%}
+{% set cfg_version    = salt['pillar.get']('redis:cfg_version')|default('2.5') -%}
 
 {% if install_from == 'source' %}
 
@@ -93,12 +97,12 @@ redis_service:
     - name: {{ redis.cfg_name }}
     - managed
     - template: jinja
-    - source: salt://redis/templates/redis-{{ cfg_version }}.conf.jinja
+    - source: salt://redis/templates/redis-{{ redis.cfg_version }}.conf.jinja
     - require:
       - pkg: {{ redis.pkg_name }}
   service:
     - name: {{ redis.svc_name }}
-    - {{ salt['pillar.get']('redis:svc_state')|default('running') }}
+    - {{ svc_state }}
     - watch:
       - file: {{ redis.cfg_name }}
     - require:

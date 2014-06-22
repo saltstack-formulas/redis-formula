@@ -10,5 +10,6 @@
         'svc_name': 'redis',
         'cfg_name': '/etc/redis.conf',
         'cfg_version': '2.4',
+        'bind': '0.0.0.0',
     },
 }, merge=salt['pillar.get']('redis:lookup')) %}

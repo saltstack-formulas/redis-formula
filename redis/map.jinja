@@ -1,0 +1,14 @@
+{% set redis = salt['grains.filter_by']({
+    'Debian': {
+        'pkg_name': 'redis-server',
+        'svc_name': 'redis-server',
+        'cfg_name': '/etc/redis/redis.conf',
+        'cfg_version': '2.6',
+    },
+    'RedHat': {
+        'pkg_name': 'redis',
+        'svc_name': 'redis',
+        'cfg_name': '/etc/redis.conf',
+        'cfg_version': '2.4',
+    },
+}, merge=salt['pillar.get']('redis:lookup')) %}

@@ -31,3 +31,27 @@ Install redis only
 Install redis and start up the service ( Ubuntu + RedHat based systems should work ).
 
 For a list of all available options, look at: `redis/templates/redis.{version}.conf.jinja` - also have a look at the pillar.example and map.jinja.
+
+
+Testing
+=======
+
+Testing is done with `kitchen-salt <https://github.com/simonmcc/kitchen-salt>`_.
+
+Install it via bundler:
+
+.. note::
+
+  bundle
+
+Then run test-kitchen with:
+
+.. note::
+
+  kitchen converge
+
+Make sure the tests pass:
+
+.. note::
+
+  kitchen verify

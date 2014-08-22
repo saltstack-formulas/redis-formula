@@ -1,0 +1,25 @@
+---
+driver:
+  name: vagrant
+
+provisioner:
+  name: salt_solo
+  formula: redis
+  pillars-from-files:
+    redis.sls: pillar.example
+  pillars:
+    top.sls:
+      base:
+        "*":
+          - redis
+  state_top:
+    base:
+      "*":
+        - redis
+        - redis.server
+
+platforms:
+  - name: ubuntu-14.04-i386
+
+suites:
+  - name: default

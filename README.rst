@@ -40,18 +40,12 @@ Testing is done with `kitchen-salt <https://github.com/simonmcc/kitchen-salt>`_.
 
 Install it via bundler:
 
-.. note::
-
-  bundle
+``$ bundle``
 
 Then run test-kitchen with:
 
-.. note::
-
-  kitchen converge
+``$ kitchen converge``
 
 Make sure the tests pass:
 
-.. note::
-
-  kitchen verify
+``$ kitchen verify``

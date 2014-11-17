@@ -8,7 +8,7 @@ include:
 {% set install_from   = redis.install_from|default('package') -%}
 {% set svc_state      = salt['pillar.get']('redis:svc_state', 'running') -%}
 {% set svc_onboot     = salt['pillar.get']('redis:svc_onboot', True) -%}
-{% set cfg_version    = salt['pillar.get']('redis:cfg_version', '2.4') -%}
+{% set cfg_version    = salt['pillar.get']('redis:cfg_version', '2.8') -%}
 
 
 {% if install_from == 'source' %}
@@ -58,20 +58,6 @@ redis-old-init-disable:
       - file: redis-init-script
 
 
-redis-pid-dir:
-  file.directory:
-    - name: /var/db/redis
-    - mode: 755
-    - user: {{ user }}
-    - group: {{ group }}
-    - makedirs: True
-    - require:
-      - user: redis_user
-    - recurse:
-      - user
-      - group
-
-
 redis-log-dir:
   file.directory:
     - name: /var/log/redis
@@ -87,12 +73,12 @@ redis-server:
   file:
     - name: /etc/redis/redis.conf
     - managed
+    - makedirs: True
     - template: jinja
     - source: salt://redis/templates/redis-{{ cfg_version }}.conf.jinja
     - require:
       - file: redis-init-script
       - cmd: redis-old-init-disable
-      - file: redis-pid-dir
   service:
     - running
     - watch:

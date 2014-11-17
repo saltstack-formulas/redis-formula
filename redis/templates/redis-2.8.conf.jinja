@@ -14,9 +14,11 @@ unixsocket {{ redis['unixsocket'] }}
 unixsocketperm {{ redis.get('unixsocketperm', 755) }}
 {% endif -%}
 
+tcp-backlog {{ redis.get('tcp-backlog', 511) }}
 tcp-keepalive {{ redis.get('tcp-keepalive', 0) }}
 
 loglevel {{ redis.get('loglevel', 'notice') }}
+
 {% if redis['syslog'] is defined %}
 syslog-enabled yes
 syslog-ident {{ redis['syslog']['ident'] }}
@@ -28,12 +30,6 @@ logfile {{ redis.get('logfile', '/var/log/redis/redis.log') }}
 {% endif -%}
 {% else %}
 logfile {{ redis.get('logfile', '/var/log/redis/redis.log') }}
-{% endif -%}
-
-{% if redis['syslog'] is defined %}
-syslog-enabled yes
-syslog-ident {{ redis['syslog']['ident'] }}
-syslog-facility {{ redis['syslog']['facility'] }}
 {% endif -%}
 
 databases {{ redis.get('database_count', 16) }}

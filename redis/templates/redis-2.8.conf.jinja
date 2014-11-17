@@ -14,8 +14,8 @@ unixsocket {{ redis['unixsocket'] }}
 unixsocketperm {{ redis.get('unixsocketperm', 755) }}
 {% endif -%}
 
-tcp-backlog {{ redis.get('tcp-backlog', 0) }}
-tcp-keepalive {{ redis.get('tcp-keepalive', 511) }}
+tcp-backlog {{ redis.get('tcp-backlog', 511) }}
+tcp-keepalive {{ redis.get('tcp-keepalive', 0) }}
 
 loglevel {{ redis.get('loglevel', 'notice') }}
 

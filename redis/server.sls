@@ -51,8 +51,7 @@ redis-init-script:
 
 
 redis-old-init-disable:
-  cmd:
-    - wait
+  cmd.wait:
     - name: update-rc.d -f redis-server remove
     - watch:
       - file: redis-init-script
@@ -70,17 +69,15 @@ redis-log-dir:
 
 
 redis-server:
-  file:
+  file.managed:
     - name: /etc/redis/redis.conf
-    - managed
     - makedirs: True
     - template: jinja
     - source: salt://redis/templates/redis-{{ cfg_version }}.conf.jinja
     - require:
       - file: redis-init-script
       - cmd: redis-old-init-disable
-  service:
-    - running
+  service.running:
     - watch:
       - file: redis-init-script
       - cmd: redis-old-init-disable
@@ -91,9 +88,8 @@ redis-server:
 
 
 redis_config:
-  file:
+  file.managed:
     - name: {{ redis.cfg_name }}
-    - managed
     - template: jinja
     - source: salt://redis/templates/redis-{{ redis.cfg_version }}.conf.jinja
     - require:
@@ -101,9 +97,8 @@ redis_config:
 
 
 redis_service:
-  service:
+  service.{{ svc_state }}:
     - name: {{ redis.svc_name }}
-    - {{ svc_state }}
     - enable: {{ svc_onboot }}
     - watch:
       - file: {{ redis.cfg_name }}

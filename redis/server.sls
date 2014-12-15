@@ -97,8 +97,7 @@ redis_config:
 
 
 redis_service:
-  service:
-    - {{ svc_state }}
+  service.{{ svc_state }}:
     - name: {{ redis.svc_name }}
     - enable: {{ svc_onboot }}
     - watch:

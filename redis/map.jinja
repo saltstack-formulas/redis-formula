@@ -3,7 +3,11 @@
         'pkg_name': 'redis-server',
         'svc_name': 'redis-server',
         'cfg_name': '/etc/redis/redis.conf',
-        'cfg_version': '2.8',
+        'cfg_version': salt['grains.filter_by']({
+	  'wheezy': '2.4',
+	  'jessie': '2.8',
+	  'default': '2.8'
+	}, grain='oscodename'),
     },
     'RedHat': {
         'pkg_name': 'redis',

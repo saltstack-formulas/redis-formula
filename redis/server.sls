@@ -38,7 +38,7 @@ redis-init-script:
   file.managed:
     - name: /etc/init/redis-server.conf
     - template: jinja
-    - source: salt://redis/templates/upstart.conf.jinja
+    - source: salt://redis/files/upstart.conf.jinja
     - mode: 0750
     - user: root
     - group: root
@@ -73,7 +73,7 @@ redis-server:
     - name: /etc/redis/redis.conf
     - makedirs: True
     - template: jinja
-    - source: salt://redis/templates/redis-{{ cfg_version }}.conf.jinja
+    - source: salt://redis/files/redis-{{ cfg_version }}.conf.jinja
     - require:
       - file: redis-init-script
       - cmd: redis-old-init-disable
@@ -91,7 +91,7 @@ redis_config:
   file.managed:
     - name: {{ redis.cfg_name }}
     - template: jinja
-    - source: salt://redis/templates/redis-{{ redis.cfg_version }}.conf.jinja
+    - source: salt://redis/files/redis-{{ cfg_version }}.conf.jinja
     - require:
       - pkg: {{ redis.pkg_name }}
 

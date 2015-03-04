@@ -8,7 +8,6 @@ include:
 {% set install_from   = redis.install_from|default('package') -%}
 {% set svc_state      = salt['pillar.get']('redis:svc_state', 'running') -%}
 {% set svc_onboot     = salt['pillar.get']('redis:svc_onboot', True) -%}
-{% set cfg_version    = salt['pillar.get']('redis:cfg_version', '2.8') -%}
 
 
 {% if install_from == 'source' %}
@@ -73,7 +72,7 @@ redis-server:
     - name: /etc/redis/redis.conf
     - makedirs: True
     - template: jinja
-    - source: salt://redis/files/redis-{{ cfg_version }}.conf.jinja
+    - source: salt://redis/files/redis-{{ redis.cfg_version }}.conf.jinja
     - require:
       - file: redis-init-script
       - cmd: redis-old-init-disable
@@ -91,7 +90,7 @@ redis_config:
   file.managed:
     - name: {{ redis.cfg_name }}
     - template: jinja
-    - source: salt://redis/files/redis-{{ cfg_version }}.conf.jinja
+    - source: salt://redis/files/redis-{{ redis.cfg_version }}.conf.jinja
     - require:
       - pkg: {{ redis.pkg_name }}
 

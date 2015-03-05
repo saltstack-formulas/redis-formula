@@ -1,8 +1,9 @@
 # Redis config
 {% set redis  = pillar.get('redis', {}) -%}
+{% from "redis/map.jinja" import redis as redis_lookup with context %}
 daemonize yes
 
-pidfile {{ redis.get('pidfile', '/var/run/redis.pid') }}
+pidfile {{ redis_lookup.get('pidfile', '/var/run/redis.pid') }}
 port {{ redis.get('port', 6379) }}
 
 {% if redis['bind'] is defined %}

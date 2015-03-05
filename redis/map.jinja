@@ -7,12 +7,14 @@
 	  'wheezy': '2.4',
 	  'jessie': '2.8',
 	  'default': '2.8'
-	}, grain='oscodename'),
+	  }, grain='oscodename'),
+	'logfile': '/var/log/redis/redis-server.log',
     },
     'RedHat': {
         'pkg_name': 'redis',
         'svc_name': 'redis',
         'cfg_name': '/etc/redis.conf',
         'cfg_version': '2.4',
+	'logfile': '/var/log/redis/redis.log',
     },
 }, merge=salt['pillar.get']('redis:lookup')) %}

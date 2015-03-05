@@ -104,9 +104,11 @@ rename-command {{ k }} {{ v }}
 requiremaxclients {{ redis_settings.maxclients }}
 {% endif -%}
 
+{% if redis_settings.maxmemory is defined %}
 maxmemory {{ redis_settings.maxmemory|default(8053063680) }}
 maxmemory-policy {{ redis_settings.maxmemory_policy|default('volatile-lru') }}
 maxmemory-samples {{ redis_settings.maxmemory_samples|default(3) }}
+{% endif %}
 
 appendonly {{ redis_settings.appendonly }}
 appendfilename {{ redis_settings.appendfilename }}

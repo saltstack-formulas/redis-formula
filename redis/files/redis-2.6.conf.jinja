@@ -1,5 +1,6 @@
 # Redis config
 {% set redis  = pillar.get('redis', {}) -%}
+{% from "redis/map.jinja" import redis as redis_lookup with context %}
 daemonize yes
 
 pidfile {{ redis.get('pidfile', '/var/run/redis.pid') }}
@@ -24,10 +25,10 @@ syslog-facility {{ redis['syslog']['facility'] }}
 {% if redis['syslog']['nologfile'] is defined %}
 logfile ""
 {% else %}
-logfile {{ redis.get('logfile', '/var/log/redis/redis.log') }}
+logfile {{ redis_lookup.get('logfile', '/var/log/redis/redis.log') }}
 {% endif -%}
 {% else %}
-logfile {{ redis.get('logfile', '/var/log/redis/redis.log') }}
+logfile {{ redis_lookup.get('logfile', '/var/log/redis/redis.log') }}
 {% endif -%}
 
 {% if redis['syslog'] is defined %}

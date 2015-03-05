@@ -1,5 +1,6 @@
 # Redis configuration file 
 {% set redis  = pillar.get('redis', {}) -%}
+{% from "redis/map.jinja" import redis as redis_lookup with context %}
 
 # Note on units: when memory size is needed, it is possible to specifiy
 # it in the usual form of 1k 5GB 4M and so forth:
@@ -53,7 +54,7 @@ loglevel {{ redis.loglevel|default('notice') }}
 # Redis to log on the standard output. Note that if you use standard
 # output for logging but daemonize, logs will be sent to /dev/null
 #logfile /var/log/redis/redis.log
-logfile {{ redis.logfile|default('/var/log/redis/redis.log') }}
+logfile {{ redis_lookup.logfile|default('/var/log/redis/redis.log') }}
 
 # To enable logging to the system logger, just set 'syslog-enabled' to yes,
 # and optionally update the other syslog parameters to suit your needs.

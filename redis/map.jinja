@@ -22,10 +22,19 @@
 }, merge=salt['pillar.get']('redis:lookup')) %}
 
 {% set redis_settings = {
+    'appendonly': 'no',
+    'appendfsync': 'everysec',
     'bin': '/usr/local/bin/redis-server',
+    'bind': '127.0.0.1',
+    'database': 16,
+    'db_dir': '/var/lib/redis';
+    'dbfilename': 'dump.rdb',
     'group': 'redis',
     'home': '/var/lib/redis',
     'install_from': 'package',
+    'loglevel': 'notice',
+    'no_apendfsync_on_write': 'no',
+    'port': 6379,
     'svc_onboot': True,
     'svc_state': 'running',
     'user': 'redis'

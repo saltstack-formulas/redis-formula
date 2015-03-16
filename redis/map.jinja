@@ -22,6 +22,13 @@
 }, merge=salt['pillar.get']('redis:lookup')) %}
 
 {% set redis_settings = {
+    'bin': '/usr/local/bin/redis-server',
+    'group': 'redis',
+    'home': '/var/lib/redis',
+    'install_from': 'package',
+    'svc_onboot': True,
+    'svc_state': 'running',
+    'user': 'redis'
   }
 %}
 

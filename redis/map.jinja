@@ -17,7 +17,7 @@
         'cfg_name': '/etc/redis.conf',
         'cfg_version': '2.4',
         'logfile': '/var/log/redis/redis.log',
-        'piddfile', '/var/run/redis.pid'
+        'piddfile': '/var/run/redis.pid'
     },
 }, merge=salt['pillar.get']('redis:lookup')) %}
 
@@ -30,21 +30,21 @@
     'bin': '/usr/local/bin/redis-server',
     'bind': '127.0.0.1',
     'databases': 16,
-    'db_dir': '/var/lib/redis';
+    'db_dir': '/var/lib/redis',
     'dbfilename': 'dump.rdb',
     'group': 'redis',
     'home': '/var/lib/redis',
     'install_from': 'package',
     'loglevel': 'notice',
     'lua-time-limit': 5000,
-    'notify-keyspace-events': '""'',
+    'notify-keyspace-events': '""',
     'no_apendfsync_on_rewrite': 'no',
     'port': 6379,
     'rdbchecksum': 'yes',
     'rdbcompression': 'yes',
     'repl-disable-tcp-nodelay': 'no',
     'slave-priority': 100,
-    'slave-read-only': 'yes'
+    'slave-read-only': 'yes',
     'slave-serve-state-data': 'yes',
     'slowlog-max-len': 128,
     'slowlog-log-slower-than': 10000,
@@ -61,4 +61,4 @@
 {% do redis_settings.update(os_map) %}
 
 {# Update settings defaults from pillar data #}
-{% do redis_settings.update(salt['pillar.get']('redis', {}) %}
+{% do redis_settings.update(salt['pillar.get']('redis', {})) %}

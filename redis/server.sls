@@ -18,7 +18,7 @@ include:
 {% set user           = redis_settings.user -%}
 {% set group          = redis_settings.group -%}
 {% set home           = redis_settings.home -%}
-{% set bin            = redis_settings.bin' -%}
+{% set bin            = redis_settings.bin -%}
 
 redis_group:
   group.present:

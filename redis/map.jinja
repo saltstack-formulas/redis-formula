@@ -9,6 +9,7 @@
 	  'default': '2.8'
 	}, grain='oscodename'),
 	'logfile': '/var/log/redis/redis-server.log',
+        'pidfile': '/var/run/redis-server.pid'
     },
     'RedHat': {
         'pkg_name': 'redis',
@@ -16,5 +17,6 @@
         'cfg_name': '/etc/redis.conf',
         'cfg_version': '2.4',
         'logfile': '/var/log/redis/redis.log',
+        'piddfile', '/var/run/redis.pid'
     },
 }, merge=salt['pillar.get']('redis:lookup')) %}

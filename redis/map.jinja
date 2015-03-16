@@ -1,4 +1,4 @@
-{% set redis = salt['grains.filter_by']({
+{% set os_map = salt['grains.filter_by']({
     'Debian': {
         'pkg_name': 'redis-server',
         'svc_name': 'redis-server',
@@ -20,3 +20,13 @@
         'piddfile', '/var/run/redis.pid'
     },
 }, merge=salt['pillar.get']('redis:lookup')) %}
+
+{% set redis_settings = {
+  }
+%}
+
+{# Merge os_map into settings dictionary #}
+{% do redis_settings.update(os_map) %}
+
+{# Update settings defaults from pillar data #}
+{% do redis_settings.update(salt['pillar.get']('redis', {}) %}

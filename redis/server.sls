@@ -5,6 +5,7 @@ include:
 {% from "redis/map.jinja" import redis_settings with context %}
 
 {% set cfg_version    = redis_settings.cfg_version -%}
+{% set cfg_name       = redis_settings.cfg_name -%}
 {% set install_from   = redis_settings.install_from -%}
 {% set pkg_name       = redis_settings.pkg_name -%}
 {% set svc_name       = redis_settings.svc_name -%}

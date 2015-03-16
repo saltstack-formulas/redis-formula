@@ -11,16 +11,16 @@ bind {{ redis_settings.bind }}
 
 {% if redis_settings.unixsocket is defined %}
 unixsocket {{ redis_settings.unixsocket }}
-unixsocketperm {{ redis_settings.unixsocketperm'|default(755) }}
+unixsocketperm {{ redis_settings.unixsocketperm|default(755) }}
 {% endif -%}
 
 tcp-keepalive {{ redis_settings.tcp-keepalive }}
 
 loglevel {{ redis_settings.loglevel }}
-{% if redis_settings.syslog' is defined %}
+{% if redis_settings.syslog is defined %}
 syslog-enabled yes
 syslog-ident {{ redis_settings.syslog.ident }}
-syslog-facility {{ redis_settings.syslog.facility' }}
+syslog-facility {{ redis_settings.syslog.facility }}
 {% if redis_settings.syslog.nologfile is defined %}
 logfile ""
 {% else %}
@@ -49,7 +49,7 @@ rdbcompression {{ redis_settings.rdbcompression }}
 rdbchecksum {{ redis_settings.rdbchecksum }}
 
 dbfilename {{ redis_settings.dbfilename }}
-dir {{ redis_settings.db_dir' }}
+dir {{ redis_settings.db_dir }}
 
 {% if redis_settings.slaveof is defined %}
 slaveof {{ redis_settings.slaveof.masterip }} {{ redis_settings.slaveof.masterport }}
@@ -67,7 +67,7 @@ repl-ping-slave-period {{ redis_settings.repl-ping-slave-period }}
 {% endif -%}
 
 {% if redis_settings.repl-timeout is defined %}
-repl-timeout {{ redis_settings.repl-timeout' }}
+repl-timeout {{ redis_settings.repl-timeout }}
 {% endif -%}
 
 repl-disable-tcp-nodelay {{ redis_settings.repl-disable-tcp-nodelay }}
@@ -105,7 +105,7 @@ requiremaxclients {{ redis_settings.maxclients }}
 {% endif -%}
 
 maxmemory {{ redis_settings.maxmemory|default(8053063680) }}
-maxmemory-policy {{ redis_settings.maxmemory-policy|default(volatile-lru') }}
+maxmemory-policy {{ redis_settings.maxmemory-policy|default('volatile-lru') }}
 maxmemory-samples {{ redis_settings.maxmemory-samples|default(3) }}
 
 appendonly {{ redis_settings.appendonly }}
@@ -113,7 +113,7 @@ appendfilename {{ redis_settings.appendfilename }}
 appendfsync {{ redis_settings.appendfsync }}
 
 no-appendfsync-on-rewrite {{ redis_settings.no-appendfsync-on-rewrite }}
-auto-aof-rewrite-percentage {{ redis_settings.auto-aof-rewrite-percentage) }}
+auto-aof-rewrite-percentage {{ redis_settings.auto-aof-rewrite-percentage }}
 
 auto-aof-rewrite-min-size {{ redis_settings.auto-aof-rewrite-min-size }}
 

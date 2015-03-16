@@ -22,21 +22,36 @@
 }, merge=salt['pillar.get']('redis:lookup')) %}
 
 {% set redis_settings = {
+    'appendfilename': 'appendonly.aof',
     'appendonly': 'no',
     'appendfsync': 'everysec',
+    'auto-aof-rewrite-min-size': '64mb',
+    'auto-aof-rewrite-percentage': 100,
     'bin': '/usr/local/bin/redis-server',
     'bind': '127.0.0.1',
-    'database': 16,
+    'databases': 16,
     'db_dir': '/var/lib/redis';
     'dbfilename': 'dump.rdb',
     'group': 'redis',
     'home': '/var/lib/redis',
     'install_from': 'package',
     'loglevel': 'notice',
-    'no_apendfsync_on_write': 'no',
+    'lua-time-limit': 5000,
+    'notify-keyspace-events': '""'',
+    'no_apendfsync_on_rewrite': 'no',
     'port': 6379,
+    'rdbchecksum': 'yes',
+    'rdbcompression': 'yes',
+    'repl-disable-tcp-nodelay': 'no',
+    'slave-priority': 100,
+    'slave-read-only': 'yes'
+    'slave-serve-state-data': 'yes',
+    'slowlog-max-len': 128,
+    'slowlog-log-slower-than': 10000,
+    'stop-writes-on-bgsave-error': 'yes',
     'svc_onboot': True,
     'svc_state': 'running',
+    'tcp_keepalive': 0,
     'user': 'redis'
   }
 %}

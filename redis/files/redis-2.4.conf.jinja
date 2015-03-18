@@ -74,7 +74,7 @@ syslog-facility {{ redis_settings.syslog.facility|default('local0') }}
 # a different one on a per-connection basis using SELECT <dbid> where
 # dbid is a number between 0 and 'databases'-1
 #databases 16
-databases {{ redis_settings.databases }}
+databases {{ redis_settings.database_count }}
 
 ################################ SNAPSHOTTING  #################################
 #

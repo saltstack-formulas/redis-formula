@@ -31,7 +31,7 @@ logfile {{ redis_settings.logfile }}
 {% endif -%}
 
 
-databases {{ redis_settings.databases }}
+databases {{ redis_settings.database_count }}
 
 {% if redis_settings.snapshots is defined %}
 {% for s in redis_settings.snapshots %}

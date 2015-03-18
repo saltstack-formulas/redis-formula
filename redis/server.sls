@@ -2,21 +2,24 @@ include:
   - redis.common
 
 
-{% from "redis/map.jinja" import redis with context %}
+{% from "redis/map.jinja" import redis_settings with context %}
 
-
-{% set install_from   = redis.install_from|default('package') -%}
-{% set svc_state      = salt['pillar.get']('redis:svc_state', 'running') -%}
-{% set svc_onboot     = salt['pillar.get']('redis:svc_onboot', True) -%}
+{% set cfg_version    = redis_settings.cfg_version -%}
+{% set cfg_name       = redis_settings.cfg_name -%}
+{% set install_from   = redis_settings.install_from -%}
+{% set pkg_name       = redis_settings.pkg_name -%}
+{% set svc_name       = redis_settings.svc_name -%}
+{% set svc_state      = redis_settings.svc_state -%}
+{% set svc_onboot     = redis_settings.svc_onboot -%}
 
 
 {% if install_from == 'source' %}
 
 
-{% set user           = salt['pillar.get']('redis:user', 'redis') -%}
-{% set group          = salt['pillar.get']('redis:group', user) -%}
-{% set home           = salt['pillar.get']('redis:home', '/var/lib/redis') -%}
-{% set bin            = salt['pillar.get']('redis:bin', '/usr/local/bin/redis-server') -%}
+{% set user           = redis_settings.user -%}
+{% set group          = redis_settings.group -%}
+{% set home           = redis_settings.home -%}
+{% set bin            = redis_settings.bin -%}
 
 redis_group:
   group.present:
@@ -72,7 +75,7 @@ redis-server:
     - name: /etc/redis/redis.conf
     - makedirs: True
     - template: jinja
-    - source: salt://redis/files/redis-{{ redis.cfg_version }}.conf.jinja
+    - source: salt://redis/files/redis-{{ cfg_version }}.conf.jinja
     - require:
       - file: redis-init-script
       - cmd: redis-old-init-disable
@@ -88,21 +91,21 @@ redis-server:
 
 redis_config:
   file.managed:
-    - name: {{ redis.cfg_name }}
+    - name: {{ cfg_name }}
     - template: jinja
-    - source: salt://redis/files/redis-{{ redis.cfg_version }}.conf.jinja
+    - source: salt://redis/files/redis-{{ cfg_version }}.conf.jinja
     - require:
-      - pkg: {{ redis.pkg_name }}
+      - pkg: {{ pkg_name }}
 
 
 redis_service:
   service.{{ svc_state }}:
-    - name: {{ redis.svc_name }}
+    - name: {{ svc_name }}
     - enable: {{ svc_onboot }}
     - watch:
-      - file: {{ redis.cfg_name }}
+      - file: {{ cfg_name }}
     - require:
-      - pkg: {{ redis.pkg_name }}
+      - pkg: {{ pkg_name }}
 
 
 {% endif %}

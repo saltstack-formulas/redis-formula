@@ -1,45 +1,40 @@
 # Redis config
-{% set redis  = pillar.get('redis', {}) -%}
+{% from "redis/map.jinja" import redis_settings with context %}
 daemonize yes
 
-pidfile {{ redis.get('pidfile', '/var/run/redis.pid') }}
-port {{ redis.get('port', 6379) }}
+pidfile {{ redis_settings.pidfile }}
+port {{ redis_settings.port }}
 
-{% if redis['bind'] is defined %}
-bind {{ redis['bind'] }}
+{% if redis_settings.bind is defined %}
+bind {{ redis_settings.bind }}
 {% endif -%}
 
-{% if redis['unixsocket'] is defined %}
-unixsocket {{ redis['unixsocket'] }}
-unixsocketperm {{ redis.get('unixsocketperm', 755) }}
+{% if redis_settings.unixsocket is defined %}
+unixsocket {{ redis_settings.unixsocket }}
+unixsocketperm {{ redis_settings.unixsocketperm|default(755) }}
 {% endif -%}
 
-tcp-keepalive {{ redis.get('tcp-keepalive', 0) }}
+tcp-keepalive {{ redis_settings.tcp_keepalive }}
 
-loglevel {{ redis.get('loglevel', 'notice') }}
-{% if redis['syslog'] is defined %}
+loglevel {{ redis_settings.loglevel }}
+{% if redis_settings.syslog is defined %}
 syslog-enabled yes
-syslog-ident {{ redis['syslog']['ident'] }}
-syslog-facility {{ redis['syslog']['facility'] }}
-{% if redis['syslog']['nologfile'] is defined %}
+syslog-ident {{ redis_settings.syslog.ident }}
+syslog-facility {{ redis_settings.syslog.facility }}
+{% if redis_settings.syslog.nologfile is defined %}
 logfile ""
 {% else %}
-logfile {{ redis.get('logfile', '/var/log/redis/redis.log') }}
+logfile {{ redis_settings.logfile }}
 {% endif -%}
 {% else %}
-logfile {{ redis.get('logfile', '/var/log/redis/redis.log') }}
+logfile {{ redis_settings.logfile }}
 {% endif -%}
 
-{% if redis['syslog'] is defined %}
-syslog-enabled yes
-syslog-ident {{ redis['syslog']['ident'] }}
-syslog-facility {{ redis['syslog']['facility'] }}
-{% endif -%}
 
-databases {{ redis.get('database_count', 16) }}
+databases {{ redis_settings.database_count }}
 
-{% if redis['snapshots'] is defined %}
-{% for s in redis['snapshots'] %}
+{% if redis_settings.snapshots is defined %}
+{% for s in redis_settings.snapshots %}
 save {{ s }}
 {% endfor %}
 {% else %}
@@ -48,86 +43,86 @@ save 300 10
 save 60 10000
 {% endif -%}
 
-stop-writes-on-bgsave-error {{ redis.get('stop-writes-on-bgsave-error', 'yes') }}
+stop-writes-on-bgsave-error {{ redis_settings.stop_writes_on_bgsave_error }}
 
-rdbcompression {{ redis.get('rdbcompression', 'yes') }}
-rdbchecksum {{ redis.get('rdbchecksum', 'yes') }}
+rdbcompression {{ redis_settings.rdbcompression }}
+rdbchecksum {{ redis_settings.rdbchecksum }}
 
-dbfilename {{ redis.get('dbfilename', 'dump.rdb') }}
-dir {{ redis.get('root_dir', '/var/lib/redis') }}
+dbfilename {{ redis_settings.dbfilename }}
+dir {{ redis_settings.root_dir }}
 
-{% if redis['slaveof'] is defined %}
-slaveof {{ redis['slaveof']['masterip'] }} {{ redis['slaveof']['masterport'] }}
+{% if redis_settings.slaveof is defined %}
+slaveof {{ redis_settings.slaveof.masterip }} {{ redis_settings.slaveof.masterport }}
 {% endif -%}
 
-{% if redis['masterauth'] is defined %}
-masterauth {{ redis['masterauth'] }}
+{% if redis_settings.masterauth is defined %}
+masterauth {{ redis_settings.masterauth }}
 {% endif -%}
 
-slave-serve-stale-data {{ redis.get('slave-serve-state-data', 'yes') }}
-slave-read-only {{ redis.get('slave-read-only', 'yes') }}
+slave-serve-stale-data {{ redis_settings.slave_serve_state_data }}
+slave-read-only {{ redis_settings.slave_read_only }}
 
-{% if redis['repl-ping-slave-period'] is defined %}
-repl-ping-slave-period {{ redis['repl-ping-slave-period'] }}
+{% if redis_settings.repl_ping_slave_period is defined %}
+repl-ping-slave-period {{ redis_settings.repl_ping_slave_period }}
 {% endif -%}
 
-{% if redis['repl-timeout'] is defined %}
-repl-timeout {{ redis['repl-timeout'] }}
+{% if redis_settings.repl_timeout is defined %}
+repl-timeout {{ redis_settings.repl_timeout }}
 {% endif -%}
 
-repl-disable-tcp-nodelay {{ redis.get('repl-disable-tcp-nodelay', 'no') }}
+repl-disable-tcp-nodelay {{ redis_settings.repl_disable_tcp_nodelay }}
 
-{% if redis['repl-backlog-size'] is defined %}
-repl-backlog-size {{ redis['repl-backlog-size'] }}
+{% if redis_settings.repl_backlog_size is defined %}
+repl-backlog-size {{ redis_settings.repl_backlog_size }}
 {% endif -%}
 
-{% if redis['repl-backlog-ttl'] is defined %}
-repl-backlog-ttl {{ redis['repl-backlog-ttl'] }}
+{% if redis_settings.repl_backlog_ttl is defined %}
+repl-backlog-ttl {{ redis_settings.repl_backlog_ttl }}
 {% endif -%}
 
-slave-priority {{ redis.get('slave-priority', 100) }}
+slave-priority {{ redis_settings.slave_priority }}
 
-{% if redis['min-slaves-to-write'] is defined %}
-requiremin-slaves-to-write {{ redis['min-slaves-to-write'] }}
+{% if redis_settings.min_slaves_to_write is defined %}
+requiremin-slaves-to-write {{ redis_settings.min_slaves_to_write }}
 {% endif -%}
 
-{% if redis['min-slaves-max-lag'] is defined %}
-requiremin-slaves-max-lag {{ redis['min-slaves-max-lag'] }}
+{% if redis_settings.min_slaves_max_lag is defined %}
+requiremin-slaves-max-lag {{ redis_settings.min_slaves_max_lag }}
 {% endif -%}
 
-{% if redis['pass'] is defined %}
-requirepass {{ redis['pass'] }}
+{% if redis_settings.pass is defined %}
+requirepass {{ redis_settings.pass }}
 {% endif -%}
 
-{% if redis['rename-command'] is defined %}
-{% for k, v in redis['rename-command'] %}
+{% if redis_settings.rename_command is defined %}
+{% for k, v in redis_settings.rename_command %}
 rename-command {{ k }} {{ v }}
 {% endfor %}
 {% endif -%}
 
-{% if redis['maxclients'] is defined %}
-requiremaxclients {{ redis['maxclients'] }}
+{% if redis_settings.maxclients is defined %}
+requiremaxclients {{ redis_settings.maxclients }}
 {% endif -%}
 
-maxmemory {{ redis.get('maxmemory', 8053063680) }}
-maxmemory-policy {{ redis.get('maxmemory-policy', 'volatile-lru') }}
-maxmemory-samples {{ redis.get('maxmemory-samples', 3) }}
+maxmemory {{ redis_settings.maxmemory|default(8053063680) }}
+maxmemory-policy {{ redis_settings.maxmemory_policy|default('volatile-lru') }}
+maxmemory-samples {{ redis_settings.maxmemory_samples|default(3) }}
 
-appendonly {{ redis.get('appendonly', 'no') }}
-appendfilename {{ redis.get('appendfilename', 'appendonly.aof') }}
-appendfsync {{ redis.get('appendfsync', 'everysec') }}
+appendonly {{ redis_settings.appendonly }}
+appendfilename {{ redis_settings.appendfilename }}
+appendfsync {{ redis_settings.appendfsync }}
 
-no-appendfsync-on-rewrite {{ redis.get('no-appendfsync-on-rewrite', 'no') }}
-auto-aof-rewrite-percentage {{ redis.get('auto-aof-rewrite-percentage', 100) }}
+no-appendfsync-on-rewrite {{ redis_settings.no_appendfsync_on_rewrite }}
+auto-aof-rewrite-percentage {{ redis_settings.auto_aof_rewrite_percentage }}
 
-auto-aof-rewrite-min-size {{ redis.get('auto-aof-rewrite-min-size', '64mb') }}
+auto-aof-rewrite-min-size {{ redis_settings.auto_aof_rewrite_min_size }}
 
-lua-time-limit {{ redis.get('lua-time-limit', 5000) }}
+lua-time-limit {{ redis_settings.lua_time_limit }}
 
-slowlog-log-slower-than {{ redis.get('slowlog-log-slower-than', 10000) }}
-slowlog-max-len {{ redis.get('slowlog-max-len', 128) }}
+slowlog-log-slower-than {{ redis_settings.slowlog_log_slower_than }}
+slowlog-max-len {{ redis_settings.slowlog_max_len }}
 
-notify-keyspace-events {{ redis.get('notify-keyspace-events', '""') }}
+notify-keyspace-events {{ redis_settings.notify_keyspace_events }}
 
 ############################### ADVANCED CONFIG ###############################
 

@@ -21,7 +21,7 @@
     },
 }, merge=salt['pillar.get']('redis:lookup')) %}
 
-{% set redis_settings = {
+{% set default_settings = {
     'appendfilename': 'appendonly.aof',
     'appendonly': 'no',
     'appendfsync': 'everysec',
@@ -57,8 +57,9 @@
   }
 %}
 
-{# Merge os_map into settings dictionary #}
-{% do redis_settings.update(os_map) %}
+{# Merge os_map into default_settings dictionary #}
+{% do default_settings.update(os_map) %}
 
 {# Update settings defaults from pillar data #}
-{% do redis_settings.update(salt['pillar.get']('redis', {})) %}
+{% set redis_settings = salt['pillar.get']('redis', default=default_settings,
+  merge=True) %}

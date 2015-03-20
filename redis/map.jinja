@@ -22,44 +22,45 @@
 }, merge=salt['pillar.get']('redis:lookup')) %}
 
 {% set default_settings = {
-    'appendfilename': 'appendonly.aof',
-    'appendonly': 'no',
-    'appendfsync': 'everysec',
-    'auto_aof_rewrite_min_size': '64mb',
-    'auto_aof_rewrite_percentage': 100,
-    'bin': '/usr/local/bin/redis-server',
-    'bind': '127.0.0.1',
-    'database_count': 16,
-    'root_dir': '/var/lib/redis',
-    'dbfilename': 'dump.rdb',
-    'group': 'redis',
-    'home': '/var/lib/redis',
-    'install_from': 'package',
-    'loglevel': 'notice',
-    'lua_time_limit': 5000,
-    'notify_keyspace_events': '""',
-    'no_appendfsync_on_rewrite': 'no',
-    'port': 6379,
-    'rdbchecksum': 'yes',
-    'rdbcompression': 'yes',
-    'repl_disable_tcp_nodelay': 'no',
-    'slave_priority': 100,
-    'slave_read_only': 'yes',
-    'slave_serve_state_data': 'yes',
-    'slowlog_max_len': 128,
-    'slowlog_log_slower_than': 10000,
-    'stop_writes_on_bgsave_error': 'yes',
-    'svc_onboot': True,
-    'svc_state': 'running',
-    'tcp_backlog': 511,
-    'tcp_keepalive': 0,
-    'user': 'redis'
-  }
-%}
+    'redis': {
+        'appendfilename': 'appendonly.aof',
+        'appendonly': 'no',
+        'appendfsync': 'everysec',
+        'auto_aof_rewrite_min_size': '64mb',
+        'auto_aof_rewrite_percentage': 100,
+        'bin': '/usr/local/bin/redis-server',
+        'bind': '127.0.0.1',
+        'database_count': 16,
+        'root_dir': '/var/lib/redis',
+        'dbfilename': 'dump.rdb',
+        'group': 'redis',
+        'home': '/var/lib/redis',
+        'install_from': 'package',
+        'loglevel': 'notice',
+        'lua_time_limit': 5000,
+        'notify_keyspace_events': '""',
+        'no_appendfsync_on_rewrite': 'no',
+        'port': 6379,
+        'rdbchecksum': 'yes',
+        'rdbcompression': 'yes',
+        'repl_disable_tcp_nodelay': 'no',
+        'slave_priority': 100,
+        'slave_read_only': 'yes',
+        'slave_serve_state_data': 'yes',
+        'slowlog_max_len': 128,
+        'slowlog_log_slower_than': 10000,
+        'stop_writes_on_bgsave_error': 'yes',
+        'svc_onboot': True,
+        'svc_state': 'running',
+        'tcp_backlog': 511,
+        'tcp_keepalive': 0,
+        'user': 'redis'
+	}
+}%}
 
 {# Merge os_map into default_settings dictionary #}
-{% do default_settings.update(os_map) %}
+{% do default_settings.redis.update(os_map) %}
 
 {# Update settings defaults from pillar data #}
-{% set redis_settings = salt['pillar.get']('redis', default=default_settings,
+{% set redis_settings = salt['pillar.get']('redis', default=default_settings.redis,
   merge=True) %}

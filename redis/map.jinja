@@ -38,6 +38,8 @@
         'install_from': 'package',
         'loglevel': 'notice',
         'lua_time_limit': 5000,
+        'maxmemory_policy': 'volatile-lru',
+        'maxmemory_samples': 3,
         'notify_keyspace_events': '""',
         'no_appendfsync_on_rewrite': 'no',
         'port': 6379,

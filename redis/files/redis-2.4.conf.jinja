@@ -110,7 +110,7 @@ save 60 10000
 # For default that's set to 'yes' as it's almost always a win.
 # If you want to save some CPU in the saving child set it to 'no' but
 # the dataset will likely be bigger if you have compressible values or keys.
-rdbcompression yes
+rdbcompression {{ redis_settings.rdbcompression }}
 
 # The filename where to dump the DB
 dbfilename {{ redis_settings.dbfilename }}
@@ -153,7 +153,7 @@ dir {{ redis_settings.root_dir }}
 #    an error "SYNC with master in progress" to all the kind of commands
 #    but to INFO and SLAVEOF.
 #
-slave-serve-stale-data yes
+slave-serve-stale-data {{ redis_settings.slave_serve_state_data }}
 
 # Slaves send PINGs to server in a predefined interval. It's possible to change
 # this interval with the repl_ping_slave_period option. The default value is 10
@@ -367,8 +367,8 @@ no-appendfsync-on-rewrite {{ redis_settings.no_appendfsync_on_rewrite }}
 # Specify a precentage of zero in order to disable the automatic AOF
 # rewrite feature.
 
-auto-aof-rewrite-percentage 100
-auto-aof-rewrite-min-size 64mb
+auto-aof-rewrite-percentage {{ redis_settings.auto_aof_rewrite_percentage }}
+auto-aof-rewrite-min-size {{ redis_settings.auto_aof_rewrite_min_size }}
 
 ################################## SLOW LOG ###################################
 
@@ -388,11 +388,11 @@ auto-aof-rewrite-min-size 64mb
 # The following time is expressed in microseconds, so 1000000 is equivalent
 # to one second. Note that a negative number disables the slow log, while
 # a value of zero forces the logging of every command.
-slowlog-log-slower-than 10000
+slowlog-log-slower-than {{ redis_settings.slowlog_log_slower_than }}
 
 # There is no limit to this length. Just be aware that it will consume memory.
 # You can reclaim memory used by the slow log with SLOWLOG RESET.
-slowlog-max-len 1024
+slowlog-max-len {{ redis_settings.slowlog_max_len }}
 
 ################################ VIRTUAL MEMORY ###############################
 

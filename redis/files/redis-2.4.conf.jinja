@@ -44,11 +44,11 @@ save 60 10000
 rdbcompression {{ redis_settings.rdbcompression }}
 
 dbfilename {{ redis_settings.dbfilename }}
-
 dir {{ redis_settings.root_dir }}
 
-# slaveof <masterip> <masterport>
-
+{% if redis_settings.slaveof is defined %}
+slaveof {{ redis_settings.slaveof.masterip }} {{ redis_settings.slaveof.masterport }}
+{% endif -%}
 
 # masterauth <master-password>
 

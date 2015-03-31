@@ -7,8 +7,10 @@ port {{ redis_settings.port }}
 
 bind {{ redis_settings.bind }}
 
-# unixsocket /tmp/redis.sock
-# unixsocketperm 755
+{% if redis_settings.unixsocket is defined %}
+unixsocket {{ redis_settings.unixsocket }}
+unixsocketperm {{ redis_settings.unixsocketperm|default(755) }}
+{% endif -%}
 
 timeout 0
 

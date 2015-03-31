@@ -1,10 +1,8 @@
 # Redis configuration file 
 {% from "redis/map.jinja" import redis_settings with context %}
-
 daemonize yes
 
 pidfile {{ redis_settings.pidfile }}
-
 port {{ redis_settings.port }}
 
 bind {{ redis_settings.bind }}
@@ -16,13 +14,13 @@ timeout 0
 
 loglevel {{ redis_settings.loglevel }}
 
-logfile {{ redis_settings.logfile }}
-
 % if redis_settings.syslog is defined %}
 syslog-enabled yes
 syslog-ident {{ redis_settings.syslog.ident|default('redis') }}
 syslog-facility {{ redis_settings.syslog.facility|default('local0') }}
 {% endif -%}
+logfile {{ redis_settings.logfile }}
+
 
 
 databases {{ redis_settings.database_count }}
@@ -66,33 +64,25 @@ slave-serve-stale-data {{ redis_settings.slave_serve_state_data }}
 {% if redis_settings.maxmemory is defined -%}
 maxmemory {{ redis_settings.maxmemory }}
 {% endif %}
-
 {% if redis_settings.maxmemory_policy is defined -%}
 maxmemory-policy {{ redis_settings.maxmemory_policy }}
 {% endif %}
-
 {% if redis_settings.maxmemory_samples is defined -%}
 maxmemory-samples {{ redis_settings.maxmemory_samples }}
 {% endif %}
 
-
-
 appendonly {{ redis_settings.appendonly }}
-
 {% if redis_settings.appendfilename is defined -%}
 appendfilename {{ redis_settings.appendfilename }}
 {% endif %}
-
-
 appendfsync {{ redis_settings.appendfsync }}
 
 no-appendfsync-on-rewrite {{ redis_settings.no_appendfsync_on_rewrite }}
-
 auto-aof-rewrite-percentage {{ redis_settings.auto_aof_rewrite_percentage }}
+
 auto-aof-rewrite-min-size {{ redis_settings.auto_aof_rewrite_min_size }}
 
 slowlog-log-slower-than {{ redis_settings.slowlog_log_slower_than }}
-
 slowlog-max-len {{ redis_settings.slowlog_max_len }}
 
 ################################ VIRTUAL MEMORY ###############################

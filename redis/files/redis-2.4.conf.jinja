@@ -60,7 +60,9 @@ slave-serve-stale-data {{ redis_settings.slave_serve_state_data }}
 repl-ping-slave-period {{ redis_settings.repl_ping_slave_period }}
 {% endif -%}
 
-# repl-timeout 60
+{% if redis_settings.repl_timeout is defined %}
+repl-timeout {{ redis_settings.repl_timeout }}
+{% endif -%}
 
 # requirepass foobared
 

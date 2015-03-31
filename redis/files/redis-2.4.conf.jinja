@@ -68,7 +68,11 @@ repl-timeout {{ redis_settings.repl_timeout }}
 requirepass {{ redis_settings.pass }}
 {% endif -%}
 
-# rename-command CONFIG ""
+{% if redis_settings.rename_command is defined %}
+{% for k, v in redis_settings.rename_command %}
+rename-command {{ k }} {{ v }}
+{% endfor %}
+{% endif -%}
 
 # maxclients 128
 

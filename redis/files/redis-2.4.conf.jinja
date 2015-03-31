@@ -56,8 +56,9 @@ masterauth {{ redis_settings.masterauth }}
 
 slave-serve-stale-data {{ redis_settings.slave_serve_state_data }}
 
-# repl-ping-slave-period 10
-
+{% if redis_settings.repl_ping_slave_period is defined %}
+repl-ping-slave-period {{ redis_settings.repl_ping_slave_period }}
+{% endif -%}
 
 # repl-timeout 60
 

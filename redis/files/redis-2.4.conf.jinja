@@ -50,8 +50,9 @@ dir {{ redis_settings.root_dir }}
 slaveof {{ redis_settings.slaveof.masterip }} {{ redis_settings.slaveof.masterport }}
 {% endif -%}
 
-# masterauth <master-password>
-
+{% if redis_settings.masterauth is defined %}
+masterauth {{ redis_settings.masterauth }}
+{% endif -%}
 
 slave-serve-stale-data {{ redis_settings.slave_serve_state_data }}
 

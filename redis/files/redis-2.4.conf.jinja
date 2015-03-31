@@ -74,7 +74,9 @@ rename-command {{ k }} {{ v }}
 {% endfor %}
 {% endif -%}
 
-# maxclients 128
+{% if redis_settings.maxclients is defined %}
+maxclients {{ redis_settings.maxclients }}
+{% endif -%}
 
 {% if redis_settings.maxmemory is defined -%}
 maxmemory {{ redis_settings.maxmemory }}

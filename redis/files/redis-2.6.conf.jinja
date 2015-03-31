@@ -59,7 +59,7 @@ slaveof {{ redis_settings.slaveof.masterip }} {{ redis_settings.slaveof.masterpo
 masterauth {{ redis_settings.masterauth }}
 {% endif -%}
 
-slave-serve-stale-data {{ redis_settings.slave_serve_state_data }}
+slave-serve-stale-data {{ redis_settings.slave_serve_stale_data }}
 slave-read-only {{ redis_settings.slave_read_only }}
 
 {% if redis_settings.repl_ping_slave_period is defined %}

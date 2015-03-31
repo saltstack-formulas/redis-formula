@@ -64,7 +64,9 @@ repl-ping-slave-period {{ redis_settings.repl_ping_slave_period }}
 repl-timeout {{ redis_settings.repl_timeout }}
 {% endif -%}
 
-# requirepass foobared
+{% if redis_settings.pass is defined %}
+requirepass {{ redis_settings.pass }}
+{% endif -%}
 
 # rename-command CONFIG ""
 

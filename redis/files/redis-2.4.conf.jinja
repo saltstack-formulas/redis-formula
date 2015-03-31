@@ -16,17 +16,20 @@ timeout 0
 
 loglevel {{ redis_settings.loglevel }}
 
-% if redis_settings.syslog is defined %}
+{% if redis_settings.syslog is defined %}
 syslog-enabled yes
-syslog-ident {{ redis_settings.syslog.ident|default('redis') }}
-syslog-facility {{ redis_settings.syslog.facility|default('local0') }}
-{% endif -%}
+syslog-ident {{ redis_settings.syslog.ident }}
+syslog-facility {{ redis_settings.syslog.facility }}
+{% if redis_settings.syslog.nologfile is defined %}
+logfile ""
+{% else %}
 logfile {{ redis_settings.logfile }}
-
-
+{% endif -%}
+{% else %}
+logfile {{ redis_settings.logfile }}
+{% endif -%}
 
 databases {{ redis_settings.database_count }}
-
 
 {% if redis_settings.snapshots is defined %}
 {% for s in redis_settings.snapshots -%}

@@ -85,9 +85,7 @@ maxmemory-samples {{ redis_settings.maxmemory_samples }}
 {% endif %}
 
 appendonly {{ redis_settings.appendonly }}
-{% if redis_settings.appendfilename is defined -%}
 appendfilename {{ redis_settings.appendfilename }}
-{% endif %}
 appendfsync {{ redis_settings.appendfsync }}
 
 no-appendfsync-on-rewrite {{ redis_settings.no_appendfsync_on_rewrite }}

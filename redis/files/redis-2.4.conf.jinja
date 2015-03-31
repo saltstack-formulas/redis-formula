@@ -80,11 +80,7 @@ maxclients {{ redis_settings.maxclients }}
 
 {% if redis_settings.maxmemory is defined -%}
 maxmemory {{ redis_settings.maxmemory }}
-{% endif %}
-{% if redis_settings.maxmemory_policy is defined -%}
 maxmemory-policy {{ redis_settings.maxmemory_policy }}
-{% endif %}
-{% if redis_settings.maxmemory_samples is defined -%}
 maxmemory-samples {{ redis_settings.maxmemory_samples }}
 {% endif %}
 

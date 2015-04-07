@@ -84,7 +84,7 @@ repl-backlog-ttl {{ redis_setting.repl_backlog_ttl }}
 slave-priority {{ redis_settings.slave_priority }}
 
 {% if redis_settings.min_slaves_to_write is defined %}
-requiremin-slaves-to-write {{ redis_settings.min_slaves_to_write }}
+min-slaves-to-write {{ redis_settings.min_slaves_to_write }}
 {% endif -%}
 
 {% if redis_settings.min_slaves_max_lag is defined %}

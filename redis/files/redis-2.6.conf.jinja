@@ -87,7 +87,7 @@ min-slaves-to-write {{ redis_settings.min_slaves_to_write }}
 {% endif -%}
 
 {% if redis_settings.min_slaves_max_lag is defined %}
-requiremin-slaves-max-lag {{ redis_settings.min_slaves_max_lag }}
+min-slaves-max-lag {{ redis_settings.min_slaves_max_lag }}
 {% endif -%}
 
 {% if redis_settings.pass is defined %}

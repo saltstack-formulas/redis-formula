@@ -9,7 +9,7 @@ bind {{ redis_settings.bind }}
 
 {% if redis_settings.unixsocket is defined %}
 unixsocket {{ redis_settings.unixsocket }}
-unixsocketperm {{ redis_settings.unixsocketperm|default(755) }}
+unixsocketperm {{ redis_settings.unixsocketperm }}
 {% endif -%}
 
 timeout 0

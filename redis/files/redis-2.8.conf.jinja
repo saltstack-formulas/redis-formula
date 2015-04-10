@@ -78,7 +78,7 @@ repl-backlog-size {{ redis_settings.repl_backlog_size }}
 {% endif -%}
 
 {% if redis_settings.repl_backlog_ttl is defined %}
-repl-backlog-ttl {{ redis_setting.repl_backlog_ttl }}
+repl-backlog-ttl {{ redis_settings.repl_backlog_ttl }}
 {% endif -%}
 
 slave-priority {{ redis_settings.slave_priority }}

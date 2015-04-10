@@ -84,11 +84,11 @@ repl-backlog-ttl {{ redis_settings.repl_backlog_ttl }}
 slave-priority {{ redis_settings.slave_priority }}
 
 {% if redis_settings.min_slaves_to_write is defined %}
-requiremin-slaves-to-write {{ redis_settings.min_slaves_to_write }}
+min-slaves-to-write {{ redis_settings.min_slaves_to_write }}
 {% endif -%}
 
 {% if redis_settings.min_slaves_max_lag is defined %}
-requiremin-slaves-max-lag {{ redis_settings.min_slaves_max_lag }}
+min-slaves-max-lag {{ redis_settings.min_slaves_max_lag }}
 {% endif -%}
 
 {% if redis_settings.pass is defined %}
@@ -102,7 +102,7 @@ rename-command {{ k }} {{ v }}
 {% endif -%}
 
 {% if redis_settings.maxclients is defined %}
-requiremaxclients {{ redis_settings.maxclients }}
+maxclients {{ redis_settings.maxclients }}
 {% endif -%}
 
 {% if redis_settings.maxmemory is defined %}

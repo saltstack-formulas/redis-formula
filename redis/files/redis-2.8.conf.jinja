@@ -11,7 +11,7 @@ bind {{ redis_settings.bind }}
 
 {% if redis_settings.unixsocket is defined %}
 unixsocket {{ redis_settings.unixsocket }}
-unixsocketperm {{ redis_settings.unixsocketperm|default(755) }}
+unixsocketperm {{ redis_settings.unixsocketperm }}
 {% endif -%}
 
 tcp-backlog {{ redis_settings.tcp_backlog }}
@@ -34,15 +34,9 @@ logfile {{ redis_settings.logfile }}
 
 databases {{ redis_settings.database_count }}
 
-{% if redis_settings.snapshots is defined %}
-{% for s in redis_settings.snapshots %}
+{% for s in redis_settings.snapshots -%}
 save {{ s }}
 {% endfor %}
-{% else %}
-save 900 1
-save 300 10
-save 60 10000
-{% endif -%}
 
 stop-writes-on-bgsave-error {{ redis_settings.stop_writes_on_bgsave_error }}
 
@@ -60,7 +54,7 @@ slaveof {{ redis_settings.slaveof.masterip }} {{ redis_settings.slaveof.masterpo
 masterauth {{ redis_settings.masterauth }}
 {% endif -%}
 
-slave-serve-stale-data {{ redis_settings.slave_serve_state_data }}
+slave-serve-stale-data {{ redis_settings.slave_serve_stale_data }}
 slave-read-only {{ redis_settings.slave_read_only }}
 
 {% if redis_settings.repl_ping_slave_period is defined %}

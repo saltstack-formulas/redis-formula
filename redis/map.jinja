@@ -51,6 +51,11 @@
         'slave_serve_stale_data': 'yes',
         'slowlog_max_len': 128,
         'slowlog_log_slower_than': 10000,
+        'snapshots': [
+            '900 1',
+            '300 10',
+            '60 10000'
+            ],
         'stop_writes_on_bgsave_error': 'yes',
         'svc_onboot': True,
         'svc_state': 'running',

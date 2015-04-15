@@ -31,15 +31,9 @@ logfile {{ redis_settings.logfile }}
 
 databases {{ redis_settings.database_count }}
 
-{% if redis_settings.snapshots is defined %}
 {% for s in redis_settings.snapshots -%}
 save {{ s }}
 {% endfor %}
-{% else %}
-save 900 1
-save 300 10
-save 60 10000
-{% endif -%}
 
 rdbcompression {{ redis_settings.rdbcompression }}
 

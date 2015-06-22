@@ -14,7 +14,9 @@ unixsocket {{ redis_settings.unixsocket }}
 unixsocketperm {{ redis_settings.unixsocketperm }}
 {% endif -%}
 
+{% if redis_settings.tcp_backlog is defined and redis_settings.tcp_backlog > 0 %}
 tcp-backlog {{ redis_settings.tcp_backlog }}
+{% endif -%}
 tcp-keepalive {{ redis_settings.tcp_keepalive }}
 
 loglevel {{ redis_settings.loglevel }}

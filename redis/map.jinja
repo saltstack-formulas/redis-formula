@@ -15,7 +15,11 @@
         'pkg_name': 'redis',
         'svc_name': 'redis',
         'cfg_name': '/etc/redis.conf',
-        'cfg_version': '2.4',
+        'cfg_version':  salt['grains.filter_by']({
+          'CentOS-6': '2.4',
+          'CentOS Linux-7': '2.8',
+          'default':  '2.4'
+         }, grain='osfinger'),
         'logfile': '/var/log/redis/redis.log',
         'pidfile': '/var/run/redis.pid'
     },

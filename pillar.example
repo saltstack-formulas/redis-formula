@@ -1,7 +1,7 @@
 redis:
   root_dir: /var/lib/redis
   user: redis
-  port: 6397
+  port: 6379
   bind: 127.0.0.1
   snapshots:
     - '900 1'

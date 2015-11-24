@@ -9,7 +9,7 @@ redis:
     - '60  10000'
 
   lookup:
-    svc_state: stopped
+    svc_state: running
     cfg_name: /etc/redis.conf
     pkg_name: redis-server
     svc_name: redis-server

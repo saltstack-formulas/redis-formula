@@ -1,7 +1,6 @@
 require "serverspec"
 
-include Serverspec::Helper::Exec
-include Serverspec::Helper::DetectOS
+set :backend, :exec
 
 describe service("redis-server") do
   it { should be_enabled }

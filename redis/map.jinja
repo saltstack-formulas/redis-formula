@@ -29,7 +29,8 @@
         'cfg_name': '/etc/redis.conf',
         'cfg_version': '3.0',
         'logfile': '/var/log/redis/redis.log',
-        'pidfile': '/var/run/redis.pid'
+        'pidfile': '/var/run/redis.pid',
+        'daemonize': 'no'
     },
 }, merge=salt['pillar.get']('redis:lookup')) %}
 

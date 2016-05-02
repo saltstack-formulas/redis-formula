@@ -88,6 +88,17 @@ redis-server:
 
 {% else %}
 
+{% if grains['os_family'] == 'Arch' %}
+{% set user           = redis_settings.user -%}
+{% set group          = redis_settings.group -%}
+redis-log-dir:
+  file.directory:
+    - name: /var/log/redis
+    - mode: 755
+    - user: {{ user }}
+    - group: {{ group }}
+    - makedirs: True
+{% endif %}
 
 redis_config:
   file.managed:

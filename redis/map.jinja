@@ -32,6 +32,14 @@
         'pidfile': '/var/run/redis.pid',
         'daemonize': 'no'
     },
+    'FreeBSD': {
+        'pkg_name': 'redis',
+        'svc_name': 'redis',
+        'cfg_name': '/usr/local/etc/redis.conf',
+        'cfg_version': '3.0',
+        'logfile': '/var/log/redis/redis.log',
+        'pidfile': '/var/run/redis.pid'
+    },
 }, merge=salt['pillar.get']('redis:lookup')) %}
 
 {% set default_settings = {

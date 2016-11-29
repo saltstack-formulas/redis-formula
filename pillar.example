@@ -13,3 +13,4 @@ redis:
     cfg_name: /etc/redis.conf
     pkg_name: redis-server
     svc_name: redis-server
+    overcommit_memory: True

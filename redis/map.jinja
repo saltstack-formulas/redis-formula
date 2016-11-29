@@ -4,26 +4,26 @@
         'svc_name': 'redis-server',
         'cfg_name': '/etc/redis/redis.conf',
         'cfg_version': salt['grains.filter_by']({
-	  'wheezy': '2.4',
-	  'jessie': '2.8',
-	  'default': '2.8'
-	}, grain='oscodename'),
-	'logfile': '/var/log/redis/redis-server.log',
+            'wheezy': '2.4',
+            'jessie': '2.8',
+            'default': '2.8'
+        }, grain='oscodename'),
+        'logfile': '/var/log/redis/redis-server.log',
         'pidfile': '/var/run/redis/redis-server.pid'
     },
     'RedHat': {
         'pkg_name': 'redis',
         'svc_name': 'redis',
         'cfg_name': '/etc/redis.conf',
-        'cfg_version':  salt['grains.filter_by']({
-          'CentOS-6': '3.0',
-          'CentOS Linux-7': '2.8',
-          'default':  '3.0'
-         }, grain='osfinger'),
+        'cfg_version': salt['grains.filter_by']({
+            'CentOS-6': '3.0',
+            'CentOS Linux-7': '2.8',
+            'default': '3.0'
+        }, grain='osfinger'),
         'logfile': '/var/log/redis/redis.log',
         'pidfile': '/var/run/redis.pid'
     },
-		'Arch': {
+    'Arch': {
         'pkg_name': 'redis',
         'svc_name': 'redis',
         'cfg_name': '/etc/redis.conf',
@@ -81,7 +81,7 @@
             '900 1',
             '300 10',
             '60 10000'
-            ],
+        ],
         'stop_writes_on_bgsave_error': 'yes',
         'svc_onboot': True,
         'svc_state': 'running',
@@ -89,8 +89,12 @@
         'tcp_backlog': 511,
         'tcp_keepalive': 0,
         'unixsocketperm': 755,
-        'user': 'redis'
-	}
+        'user': 'redis',
+        'overcommit_memory': salt['pillar.get']('redis:lookup:overcommit_memory', default=salt['grains.filter_by']({
+            'Linux': True,
+            'default': False
+        }, grain='kernel'))
+    }
 }%}
 
 {# Merge os_map into default_settings dictionary #}

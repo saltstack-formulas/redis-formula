@@ -4,13 +4,14 @@ include:
 
 {% from "redis/map.jinja" import redis_settings with context %}
 
-{% set cfg_version    = redis_settings.cfg_version -%}
-{% set cfg_name       = redis_settings.cfg_name -%}
-{% set install_from   = redis_settings.install_from -%}
-{% set pkg_name       = redis_settings.pkg_name -%}
-{% set svc_name       = redis_settings.svc_name -%}
-{% set svc_state      = redis_settings.svc_state -%}
-{% set svc_onboot     = redis_settings.svc_onboot -%}
+{% set cfg_version       = redis_settings.cfg_version -%}
+{% set cfg_name          = redis_settings.cfg_name -%}
+{% set install_from      = redis_settings.install_from -%}
+{% set pkg_name          = redis_settings.pkg_name -%}
+{% set svc_name          = redis_settings.svc_name -%}
+{% set svc_state         = redis_settings.svc_state -%}
+{% set svc_onboot        = redis_settings.svc_onboot -%}
+{% set overcommit_memory = redis_settings.overcommit_memory -%}
 
 
 {% if install_from == 'source' %}
@@ -119,4 +120,17 @@ redis_service:
       - pkg: {{ pkg_name }}
 
 
+{% endif %}
+
+
+{% if overcommit_memory == True %}
+redis_overcommit_memory:
+  sysctl.present:
+    - name: vm.overcommit_memory
+    - value: 1
+    - require_in:
+      - service: redis-server
+      {% if svc_state == 'running' %}
+      - service: redis_service
+      {% endif %}
 {% endif %}

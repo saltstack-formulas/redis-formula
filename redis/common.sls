@@ -18,7 +18,7 @@ redis-dependencies:
         - python-devel
         - make
         - libxml2-devel
-    {% elif grains['os_family'] == 'Debian' or 'Ubuntu' %}
+    {% elif grains['os_family'] == 'Debian' or grains['os_family'] == 'Ubuntu' %}
         - build-essential
         - python-dev
         - libxml2-dev

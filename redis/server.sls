@@ -129,7 +129,9 @@ redis_overcommit_memory:
     - name: vm.overcommit_memory
     - value: 1
     - require_in:
+      {% if install_from == 'source' %}
       - service: redis-server
+      {% endif %}
       {% if svc_state == 'running' %}
       - service: redis_service
       {% endif %}

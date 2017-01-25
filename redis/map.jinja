@@ -17,7 +17,7 @@
         'cfg_name': '/etc/redis.conf',
         'cfg_version': salt['grains.filter_by']({
             'CentOS-6': '3.0',
-            'CentOS Linux-7': '2.8',
+            'CentOS Linux-7': '3.2',
             'default': '3.0'
         }, grain='osfinger'),
         'logfile': '/var/log/redis/redis.log',

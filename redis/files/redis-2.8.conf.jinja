@@ -14,11 +14,6 @@ unixsocket {{ redis_settings.unixsocket }}
 unixsocketperm {{ redis_settings.unixsocketperm }}
 {% endif -%}
 
-{% if redis_settings.tcp_backlog is defined and redis_settings.tcp_backlog > 0 %}
-tcp-backlog {{ redis_settings.tcp_backlog }}
-{% endif -%}
-tcp-keepalive {{ redis_settings.tcp_keepalive }}
-
 loglevel {{ redis_settings.loglevel }}
 
 {% if redis_settings.syslog is defined %}
@@ -40,10 +35,8 @@ databases {{ redis_settings.database_count }}
 save {{ s }}
 {% endfor %}
 
-stop-writes-on-bgsave-error {{ redis_settings.stop_writes_on_bgsave_error }}
 
 rdbcompression {{ redis_settings.rdbcompression }}
-rdbchecksum {{ redis_settings.rdbchecksum }}
 
 dbfilename {{ redis_settings.dbfilename }}
 dir {{ redis_settings.root_dir }}
@@ -57,7 +50,6 @@ masterauth {{ redis_settings.masterauth }}
 {% endif -%}
 
 slave-serve-stale-data {{ redis_settings.slave_serve_stale_data }}
-slave-read-only {{ redis_settings.slave_read_only }}
 
 {% if redis_settings.repl_ping_slave_period is defined %}
 repl-ping-slave-period {{ redis_settings.repl_ping_slave_period }}
@@ -67,8 +59,6 @@ repl-ping-slave-period {{ redis_settings.repl_ping_slave_period }}
 repl-timeout {{ redis_settings.repl_timeout }}
 {% endif -%}
 
-repl-disable-tcp-nodelay {{ redis_settings.repl_disable_tcp_nodelay }}
-
 {% if redis_settings.repl_backlog_size is defined %}
 repl-backlog-size {{ redis_settings.repl_backlog_size }}
 {% endif -%}
@@ -77,7 +67,6 @@ repl-backlog-size {{ redis_settings.repl_backlog_size }}
 repl-backlog-ttl {{ redis_settings.repl_backlog_ttl }}
 {% endif -%}
 
-slave-priority {{ redis_settings.slave_priority }}
 
 {% if redis_settings.min_slaves_to_write is defined %}
 min-slaves-to-write {{ redis_settings.min_slaves_to_write }}
@@ -116,17 +105,12 @@ auto-aof-rewrite-percentage {{ redis_settings.auto_aof_rewrite_percentage }}
 
 auto-aof-rewrite-min-size {{ redis_settings.auto_aof_rewrite_min_size }}
 
-lua-time-limit {{ redis_settings.lua_time_limit }}
 
 slowlog-log-slower-than {{ redis_settings.slowlog_log_slower_than }}
 slowlog-max-len {{ redis_settings.slowlog_max_len }}
 
-notify-keyspace-events {{ redis_settings.notify_keyspace_events }}
 
 ############################### ADVANCED CONFIG ###############################
-
-hash-max-ziplist-entries 512
-hash-max-ziplist-value 64
 
 list-max-ziplist-entries 512
 list-max-ziplist-value 64
@@ -137,11 +121,3 @@ zset-max-ziplist-entries 128
 zset-max-ziplist-value 64
 
 activerehashing yes
-
-client-output-buffer-limit normal 0 0 0
-client-output-buffer-limit slave 256mb 64mb 60
-client-output-buffer-limit pubsub 32mb 8mb 60
-
-hz 10
-
-aof-rewrite-incremental-fsync yes

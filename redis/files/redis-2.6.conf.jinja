@@ -30,12 +30,15 @@ logfile {{ redis_settings.logfile }}
 logfile {{ redis_settings.logfile }}
 {% endif -%}
 
-
 databases {{ redis_settings.database_count }}
 
+{% if redis_settings.snapshots is iterable %}
 {% for s in redis_settings.snapshots -%}
+{%- if s != '' -%}
 save {{ s }}
-{% endfor %}
+{% endif -%}
+{% endfor -%}
+{% endif %}
 
 stop-writes-on-bgsave-error {{ redis_settings.stop_writes_on_bgsave_error }}
 

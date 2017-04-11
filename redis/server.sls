@@ -7,11 +7,11 @@ include:
 {% set cfg_version       = redis_settings.cfg_version -%}
 {% set cfg_name          = redis_settings.cfg_name -%}
 {% set install_from      = redis_settings.install_from -%}
-{% set pkg_name          = redis_settings.pkg_name -%}
 {% set svc_name          = redis_settings.svc_name -%}
 {% set svc_state         = redis_settings.svc_state -%}
 {% set svc_onboot        = redis_settings.svc_onboot -%}
 {% set overcommit_memory = redis_settings.overcommit_memory -%}
+{% set port              = redis_settings.port -%}
 
 
 {% if install_from == 'source' %}
@@ -32,7 +32,6 @@ redis_user:
     - name: {{ user }}
     - gid_from_name: True
     - home: {{ home }}
-    - group: {{ group }}
     - require:
       - group: redis_group
 
@@ -53,13 +52,6 @@ redis-init-script:
       - sls: redis.common
 
 
-redis-old-init-disable:
-  cmd.wait:
-    - name: update-rc.d -f redis-server remove
-    - watch:
-      - file: redis-init-script
-
-
 redis-log-dir:
   file.directory:
     - name: /var/log/redis
@@ -69,25 +61,6 @@ redis-log-dir:
     - makedirs: True
     - require:
       - user: redis_user
-
-
-redis-server:
-  file.managed:
-    - name: /etc/redis/redis.conf
-    - makedirs: True
-    - template: jinja
-    - source: salt://redis/files/redis-{{ cfg_version }}.conf.jinja
-    - require:
-      - file: redis-init-script
-      - cmd: redis-old-init-disable
-  service.running:
-    - watch:
-      - file: redis-init-script
-      - cmd: redis-old-init-disable
-      - file: redis-server
-
-
-{% else %}
 
 {% if grains['os_family'] == 'Arch' %}
 {% set user           = redis_settings.user -%}
@@ -100,27 +73,39 @@ redis-log-dir:
     - group: {{ group }}
     - makedirs: True
 {% endif %}
+{% endif %}
 
 redis_config:
   file.managed:
     - name: {{ cfg_name }}
     - template: jinja
     - source: salt://redis/files/redis-{{ cfg_version }}.conf.jinja
-    - require:
-      - pkg: {{ pkg_name }}
 
+{% if install_from != 'source' %}
+redis-initd:
+  file.managed:
+    - name: /etc/init.d/redis
+    - template: jinja
+    - source: salt://redis/files/redis_initd.jinja
+    - mode: 0777
+    - user: root
+    - group: root
+    - require:
+      - file: redis_config
+    - require_in:
+      - file: redis_service
+{% endif %}
 
 redis_service:
   service.{{ svc_state }}:
+    {% if install_from == 'source' %}
+    - name: {{ svc_name }}_{{ port }}
+    {% else %}
     - name: {{ svc_name }}
+    {% endif %}
     - enable: {{ svc_onboot }}
     - watch:
       - file: {{ cfg_name }}
-    - require:
-      - pkg: {{ pkg_name }}
-
-
-{% endif %}
 
 
 {% if overcommit_memory == True %}
@@ -128,11 +113,8 @@ redis_overcommit_memory:
   sysctl.present:
     - name: vm.overcommit_memory
     - value: 1
+    {% if grains['os_family'] == 'Arch' %}
     - require_in:
-      {% if install_from == 'source' %}
-      - service: redis-server
-      {% endif %}
-      {% if svc_state == 'running' %}
       - service: redis_service
-      {% endif %}
+    {% endif %}
 {% endif %}

@@ -1,27 +1,29 @@
 {% set os_map = salt['grains.filter_by']({
     'Debian': {
-        'pkg_name': 'redis-server',
-        'svc_name': 'redis-server',
-        'cfg_name': '/etc/redis/redis.conf',
+        'pkg_name'          : 'redis-server',
+        'python_dev_package': 'python-dev',
+        'svc_name'          : 'redis-server',
+        'cfg_name'          : '/etc/redis/redis.conf',
         'cfg_version': salt['grains.filter_by']({
             'wheezy': '2.4',
             'jessie': '2.8',
             'default': '2.8'
         }, grain='oscodename'),
-        'logfile': '/var/log/redis/redis-server.log',
-        'pidfile': '/var/run/redis/redis-server.pid'
+        'logfile'           : '/var/log/redis/redis-server.log',
+        'pidfile'           : '/var/run/redis/redis-server.pid'
     },
     'RedHat': {
-        'pkg_name': 'redis',
-        'svc_name': 'redis',
-        'cfg_name': '/etc/redis.conf',
-        'cfg_version': salt['grains.filter_by']({
+        'pkg_name'          : 'redis',
+        'python_dev_package': 'python-devel',
+        'svc_name'          : 'redis',
+        'cfg_name'          : '/etc/redis.conf',
+        'cfg_version'       : salt['grains.filter_by']({
             'CentOS-6': '3.0',
             'CentOS Linux-7': '3.2',
             'default': '3.0'
         }, grain='osfinger'),
-        'logfile': '/var/log/redis/redis.log',
-        'pidfile': '/var/run/redis.pid'
+        'logfile'           : '/var/log/redis/redis.log',
+        'pidfile'           : '/var/run/redis.pid'
     },
     'Arch': {
         'pkg_name': 'redis',

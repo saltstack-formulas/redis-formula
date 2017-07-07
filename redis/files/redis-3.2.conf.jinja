@@ -1,6 +1,6 @@
 # Redis config
 {% from "redis/map.jinja" import redis_settings with context %}
-daemonize {{ redis_settings.daemonize }}
+daemonize yes
 
 pidfile {{ redis_settings.pidfile }}
 port {{ redis_settings.port }}
@@ -12,10 +12,6 @@ bind {{ redis_settings.bind }}
 {% if redis_settings.unixsocket is defined %}
 unixsocket {{ redis_settings.unixsocket }}
 unixsocketperm {{ redis_settings.unixsocketperm }}
-{% endif -%}
-
-{% if redis_settings.timeout is defined %}
-timeout {{ redis_settings.timeout }}
 {% endif -%}
 
 {% if redis_settings.tcp_backlog is defined and redis_settings.tcp_backlog > 0 %}
@@ -62,11 +58,6 @@ masterauth {{ redis_settings.masterauth }}
 
 slave-serve-stale-data {{ redis_settings.slave_serve_stale_data }}
 slave-read-only {{ redis_settings.slave_read_only }}
-
-{% if redis_settings.repl_diskless_sync is defined %}
-repl-diskless-sync {{ redis_settings.repl_diskless_sync}}
-repl-diskless-sync-delay {{ redis_settings.repl_diskless_sync_delay}}
-{% endif -%}
 
 {% if redis_settings.repl_ping_slave_period is defined %}
 repl-ping-slave-period {{ redis_settings.repl_ping_slave_period }}
@@ -121,28 +112,14 @@ appendfilename {{ redis_settings.appendfilename }}
 appendfsync {{ redis_settings.appendfsync }}
 
 no-appendfsync-on-rewrite {{ redis_settings.no_appendfsync_on_rewrite }}
-
 auto-aof-rewrite-percentage {{ redis_settings.auto_aof_rewrite_percentage }}
+
 auto-aof-rewrite-min-size {{ redis_settings.auto_aof_rewrite_min_size }}
-
-aof-load-truncated {{ redis_settings.aof_load_truncated }}
-
 
 lua-time-limit {{ redis_settings.lua_time_limit }}
 
-{% if redis_settings.cluster_enabled is defined %}
-cluster-enabled {{ redis_settings.cluster_enabled}}
-cluster-config-file {{ redis_settings.cluster_config_file}}
-cluster-node-timeout {{ redis_settings.cluster_node_timeout}}
-cluster-slave-validity-factor {{ redis_settings.cluster_slave_validity_factor}}
-cluster-migration-barrier {{ redis_settings.cluster_migration_barrier}}
-cluster-require-full-coverage {{ redis_settings.cluster_require_full_coverage}}
-{% endif %}
-
 slowlog-log-slower-than {{ redis_settings.slowlog_log_slower_than }}
 slowlog-max-len {{ redis_settings.slowlog_max_len }}
-
-latency-monitor-threshold {{ redis_settings.latency_monitor_threshold }}
 
 notify-keyspace-events {{ redis_settings.notify_keyspace_events }}
 
@@ -153,13 +130,13 @@ hash-max-ziplist-value 64
 
 list-max-ziplist-entries 512
 list-max-ziplist-value 64
+list-max-ziplist-size -2
+list-compress-depth 0
 
 set-max-intset-entries 512
 
 zset-max-ziplist-entries 128
 zset-max-ziplist-value 64
-
-hll-sparse-max-bytes 3000
 
 activerehashing yes
 
@@ -170,3 +147,6 @@ client-output-buffer-limit pubsub 32mb 8mb 60
 hz 10
 
 aof-rewrite-incremental-fsync yes
+
+protected-mode yes
+

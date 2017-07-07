@@ -89,7 +89,7 @@ requirepass {{ redis_settings.pass }}
 {% endif -%}
 
 {% if redis_settings.rename_command is defined %}
-{% for k, v in redis_settings.rename_command %}
+{% for k, v in redis_settings.rename_command.items() %}
 rename-command {{ k }} {{ v }}
 {% endfor %}
 {% endif -%}

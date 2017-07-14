@@ -81,7 +81,7 @@ redis_config:
     - template: jinja
     - source: salt://redis/files/redis-{{ cfg_version }}.conf.jinja
 
-{% if install_from != 'source' %}
+{% if install_from == 'source' %}
 redis-initd:
   file.managed:
     - name: /etc/init.d/redis

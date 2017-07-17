@@ -67,6 +67,7 @@ install-redis:
     - name: {{ redis_settings.pkg_name }}
     {% if redis_settings.version is defined %}
     - version: {{ redis_settings.version }}
+    - ignore_epoch: True
     {% endif %}
 
 

@@ -1,117 +1,108 @@
-# Redis config
+#
+# This file is managed by salt. Do not edit by hand.
+#
 {% from "redis/map.jinja" import redis_settings with context %}
-{%- if redis_settings.include is defined %}
+################################## INCLUDES ################################### 
+{% if redis_settings.include is defined %}
 {%- for include in redis_settings.include %}
 include {{ include }}
 {%- endfor %}
 {%- endif %}
-{%- if redis_settings.daemonize is defined %}
+
+################################## NETWORK #####################################
+{% if redis_settings.bind is defined %}
+bind {{ redis_settings.bind }}
+{%- endif %}
+{%- if redis_settings['protected-mode'] is defined %}
+protected-mode {{ redis_settings['protected-mode'] }}
+{%- else %}
+protected-mode yes
+{%- endif %}
+port {{ redis_settings.port }}
+{%- if redis_settings.tcp_backlog is defined and redis_settings.tcp_backlog > 0 %}
+tcp-backlog {{ redis_settings.tcp_backlog }}
+{%- endif %}
+{%- if redis_settings.unixsocket is defined %}
+unixsocket {{ redis_settings.unixsocket }}
+unixsocketperm {{ redis_settings.unixsocketperm }}
+{%- endif %}
+{%- if redis_settings.timeout is defined %}
+timeout {{ redis_settings.timeout }}
+{%- endif %}
+tcp-keepalive {{ redis_settings.tcp_keepalive }}
+
+################################# GENERAL #####################################
+{% if redis_settings.daemonize is defined %}
 daemonize {{ redis_settings.daemonize }}
 {%- else %}
 daemonize yes
 {%- endif %}
 {%- if redis_settings.supervised is defined %}
 supervised {{ redis_settings.supervised }}
+{%- else %}
+supervised no
 {%- endif %}
-
 pidfile {{ redis_settings.pidfile }}
-port {{ redis_settings.port }}
-
-{% if redis_settings.bind is defined %}
-bind {{ redis_settings.bind }}
-{% endif -%}
-
-{% if redis_settings.unixsocket is defined %}
-unixsocket {{ redis_settings.unixsocket }}
-unixsocketperm {{ redis_settings.unixsocketperm }}
-{% endif -%}
-
-{% if redis_settings.tcp_backlog is defined and redis_settings.tcp_backlog > 0 %}
-tcp-backlog {{ redis_settings.tcp_backlog }}
-{% endif -%}
-
-{%- if redis_settings.timeout is defined %}
-timeout {{ redis_settings.timeout }}
-{%- endif %}
-
-tcp-keepalive {{ redis_settings.tcp_keepalive }}
-
 loglevel {{ redis_settings.loglevel }}
-
-{% if redis_settings.syslog is defined %}
+{%- if redis_settings.syslog is defined %}
 syslog-enabled yes
 syslog-ident {{ redis_settings.syslog.ident }}
 syslog-facility {{ redis_settings.syslog.facility }}
-{% if redis_settings.syslog.nologfile is defined %}
+{%- if redis_settings.syslog.nologfile is defined %}
 logfile ""
-{% else %}
+{%- else %}
 logfile {{ redis_settings.logfile }}
-{% endif -%}
-{% else %}
+{%- endif %}
+{%- else %}
 logfile {{ redis_settings.logfile }}
-{% endif -%}
-
+{%- endif %}
 databases {{ redis_settings.database_count }}
 
-{% for s in redis_settings.snapshots -%}
+################################ SNAPSHOTTING  ################################
+{% for s in redis_settings.snapshots %}
 save {{ s }}
-{% endfor %}
-
+{%- endfor %}
 stop-writes-on-bgsave-error {{ redis_settings.stop_writes_on_bgsave_error }}
-
 rdbcompression {{ redis_settings.rdbcompression }}
 rdbchecksum {{ redis_settings.rdbchecksum }}
-
 dbfilename {{ redis_settings.dbfilename }}
 dir {{ redis_settings.root_dir }}
 
+################################# REPLICATION #################################
 {% if redis_settings.slaveof is defined %}
 slaveof {{ redis_settings.slaveof.masterip }} {{ redis_settings.slaveof.masterport }}
-{% endif -%}
-
-{% if redis_settings.masterauth is defined %}
+{%- endif %}
+{%- if redis_settings.masterauth is defined %}
 masterauth {{ redis_settings.masterauth }}
-{% endif -%}
-
+{%- endif %}
 slave-serve-stale-data {{ redis_settings.slave_serve_stale_data }}
 slave-read-only {{ redis_settings.slave_read_only }}
-
 {%- if redis_settings.repl_diskless_sync is defined %}
 repl-diskless-sync {{ redis_settings.repl_diskless_sync }}
 {%- endif %}
-
 {%- if redis_settings.repl_diskless_sync_delay is defined %}
 repl-diskless-sync-delay {{ redis_settings.repl_diskless_sync_delay }}
 {%- endif %}
-
-{% if redis_settings.repl_ping_slave_period is defined %}
+{%- if redis_settings.repl_ping_slave_period is defined %}
 repl-ping-slave-period {{ redis_settings.repl_ping_slave_period }}
-{% endif -%}
-
-{% if redis_settings.repl_timeout is defined %}
+{%- endif %}
+{%- if redis_settings.repl_timeout is defined %}
 repl-timeout {{ redis_settings.repl_timeout }}
-{% endif -%}
-
+{%- endif %}
 repl-disable-tcp-nodelay {{ redis_settings.repl_disable_tcp_nodelay }}
-
-{% if redis_settings.repl_backlog_size is defined %}
+{%- if redis_settings.repl_backlog_size is defined %}
 repl-backlog-size {{ redis_settings.repl_backlog_size }}
-{% endif -%}
-
-{% if redis_settings.repl_backlog_ttl is defined %}
+{%- endif %}
+{%- if redis_settings.repl_backlog_ttl is defined %}
 repl-backlog-ttl {{ redis_settings.repl_backlog_ttl }}
-{% endif -%}
-
+{%- endif %}
 slave-priority {{ redis_settings.slave_priority }}
-
-{% if redis_settings.min_slaves_to_write is defined %}
+{%- if redis_settings.min_slaves_to_write is defined %}
 min-slaves-to-write {{ redis_settings.min_slaves_to_write }}
-{% endif -%}
-
-{% if redis_settings.min_slaves_max_lag is defined %}
+{%- endif %}
+{%- if redis_settings.min_slaves_max_lag is defined %}
 min-slaves-max-lag {{ redis_settings.min_slaves_max_lag }}
-{% endif -%}
-
+{%- endif %}
 {%- if redis_settings.slave_announce_ip is defined %}
 slave-announce-ip {{ redis_settings.slave_announce_ip }}
 {%- endif %}
@@ -119,80 +110,81 @@ slave-announce-ip {{ redis_settings.slave_announce_ip }}
 slave-announce-port {{ redis_settings.slave_announce_port }}
 {%- endif %}
 
+################################## SECURITY ###################################
 {% if redis_settings.pass is defined %}
 requirepass {{ redis_settings.pass }}
-{% endif -%}
-
-{% if redis_settings.rename_command is defined %}
-{% for k, v in redis_settings.rename_command.items() %}
+{%- endif %}
+{%- if redis_settings.rename_command is defined %}
+{%- for k, v in redis_settings.rename_command.items() %}
 rename-command {{ k }} {{ v }}
-{% endfor %}
-{% endif -%}
+{%- endfor %}
+{%- endif %}
 
+################################### LIMITS ####################################
 {% if redis_settings.maxclients is defined %}
 maxclients {{ redis_settings.maxclients }}
-{% endif -%}
-
-{% if redis_settings.maxmemory is defined %}
+{%- endif %}
+{%- if redis_settings.maxmemory is defined %}
 maxmemory {{ redis_settings.maxmemory }}
 maxmemory-policy {{ redis_settings.maxmemory_policy }}
 maxmemory-samples {{ redis_settings.maxmemory_samples }}
-{% endif %}
+{%- endif %}
+
+############################## APPEND ONLY MODE ###############################
 
 appendonly {{ redis_settings.appendonly }}
 appendfilename {{ redis_settings.appendfilename }}
 appendfsync {{ redis_settings.appendfsync }}
-
 no-appendfsync-on-rewrite {{ redis_settings.no_appendfsync_on_rewrite }}
 auto-aof-rewrite-percentage {{ redis_settings.auto_aof_rewrite_percentage }}
-
 auto-aof-rewrite-min-size {{ redis_settings.auto_aof_rewrite_min_size }}
-
 {%- if redis_settings.aof_load_truncated is defined %}
 aof-load-truncated {{ redis_settings.aof_load_truncated }}
 {%- endif %}
 
+################################ LUA SCRIPTING  ###############################
+
 lua-time-limit {{ redis_settings.lua_time_limit }}
 
-{%- if redis_settings.cluster_enabled %}
+################################ REDIS CLUSTER  ###############################
+{% if redis_settings.cluster_enabled is defined %}
 cluster-enabled {{ redis_settings.cluster_enabled }}
 {%- endif %}
-{%- if redis_settings.cluster_config_file %}
+{%- if redis_settings.cluster_config_file is defined %}
 cluster-config-file {{ redis_settings.cluster_config_file }}
 {%- endif %}
-{%- if redis_settings.cluster_node_timeout %}
+{%- if redis_settings.cluster_node_timeout is defined %}
 cluster-node-timeout {{ redis_settings.cluster_node_timeout }}
 {%- endif %}
-{%- if redis_settings.cluster_slave_validity_factor %}
+{%- if redis_settings.cluster_slave_validity_factor is defined %}
 cluster-slave-validity-factor {{ redis_settings.cluster_slave_validity_factor }}
 {%- endif %}
-{%- if redis_settings.cluster_migration_barrier %}
+{%- if redis_settings.cluster_migration_barrier is defined %}
 cluster-migration-barrier {{ redis_settings.cluster_migration_barrier }}
 {%- endif %}
-{%- if redis_settings.cluster_require_full_coverage %}
+{%- if redis_settings.cluster_require_full_coverage is defined %}
 cluster-require-full-coverage {{ redis_settings.cluster_require_full_coverage }}
 {%- endif %}
+
+
+################################## SLOW LOG ###################################
 
 slowlog-log-slower-than {{ redis_settings.slowlog_log_slower_than }}
 slowlog-max-len {{ redis_settings.slowlog_max_len }}
 
-notify-keyspace-events {{ redis_settings.notify_keyspace_events }}
-
-{%- if redis_settings.latency_monitor_threshold is defined %}
+################################ LATENCY MONITOR ##############################
+{% if redis_settings.latency_monitor_threshold is defined %}
 latency-monitor-threshold {{ redis_settings.latency_monitor_threshold }}
 {%- else %}
 latency-monitor-threshold 0
 {%- endif %}
 
-{%- if redis_settings.extra_opts is defined %}
-{%- for option,value in redis_settings.extra_opts.items() %}
-{{ option }} {{ value }}
-{%- endfor %}
-{%- endif %}
+############################# EVENT NOTIFICATION ##############################
+
+notify-keyspace-events {{ redis_settings.notify_keyspace_events }}
 
 ############################### ADVANCED CONFIG ###############################
-
-{%- if redis_settings.hash_max_ziplist_entries is defined %}
+{% if redis_settings.hash_max_ziplist_entries is defined %}
 hash-max-ziplist-entries {{ redis_settings.hash_max_ziplist_entries }}
 {%- else %}
 hash-max-ziplist-entries 512
@@ -262,9 +254,9 @@ aof-rewrite-incremental-fsync {{ redis_settings.aof_rewrite_incremental_fsync }}
 aof-rewrite-incremental-fsync yes
 {%- endif %}
 
-{%- if redis_settings['protected-mode'] is defined %}
-protected-mode {{ redis_settings['protected-mode'] }}
-{%- else %}
-protected-mode yes
+{%- if redis_settings.extra_opts is defined %}
+################################ EXTRA OPTIONS ###############################
+{% for option,value in redis_settings.extra_opts.items() %}
+{{ option }} {{ value }}
+{%- endfor %}
 {%- endif %}
-

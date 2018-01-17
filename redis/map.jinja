@@ -10,7 +10,15 @@
             'default': '2.8'
         }, grain='oscodename'),
         'logfile'           : '/var/log/redis/redis-server.log',
-        'pidfile'           : '/var/run/redis/redis-server.pid'
+        'pidfile'           : '/var/run/redis/redis-server.pid',
+        'sentinel_pkg'      : salt['grains.filter_by']({
+            'Ubuntu-14.04': 'redis-server',
+            'Ubuntu-16.04': 'redis-sentinel',
+            'default': 'redis-server'
+        }, grain='osfinger'),
+        'sentinel_service'  : 'redis-sentinel',
+        'sentinel_cfg'      : '/etc/redis/sentinel.conf',
+        'sentinel_logfile'  : '/var/log/redis/redis-sentinel.log',
     },
     'RedHat': {
         'pkg_name'          : 'redis',
@@ -23,7 +31,15 @@
             'default': '3.0'
         }, grain='osfinger'),
         'logfile'           : '/var/log/redis/redis.log',
-        'pidfile'           : '/var/run/redis.pid'
+        'pidfile'           : '/var/run/redis.pid',
+        'sentinel_pkg'      : salt['grains.filter_by']({
+            'CentOS-6': 'redis',
+            'CentOS Linux-7': 'redis',
+            'default': 'redis'
+        }, grain='osfinger'),
+        'sentinel_service'  : 'redis-sentinel',
+        'sentinel_cfg'      : '/etc/redis-sentinel.conf',
+        'sentinel_logfile'  : '/var/log/redis/sentinel.log',
     },
     'Arch': {
         'pkg_name': 'redis',
@@ -95,7 +111,28 @@
         'overcommit_memory': salt['pillar.get']('redis:lookup:overcommit_memory', default=salt['grains.filter_by']({
             'Linux': True,
             'default': False
-        }, grain='kernel'))
+        }, grain='kernel')),
+        'sentinel': {
+            'port': 26379,
+            'dir': '/var/lib/redis',
+            'user': 'redis',
+            'group': salt['grains.filter_by']({
+                'CentOS-6': 'root',
+                'CentOS Linux-7': 'root',
+                'default': 'redis',
+            }, grain='osfinger'),
+            'pidfile': salt['grains.filter_by']({
+                'Debian': '/var/run/redis/redis-sentinel.pid',
+                'RedHat': '/var/run/redis/sentinel.pid',
+            }, grain='os_family'),
+            'daemonize': salt['grains.filter_by']({
+                'Ubuntu-14.04': 'yes',
+                'Ubuntu-16.04': 'yes',
+                'CentOS-6': 'yes',
+                'CentOS Linux-7': 'no',
+                'default': 'yes',
+            }, grain='osfinger'),
+        }
     }
 }%}
 

@@ -1,4 +1,12 @@
 redis:
+  disable_transparent_huge_pages: True   # If set, it executes: "echo never > /sys/kernel/mm/transparent_hugepage/enabled"
+                                         # as it is recommended for redis deployments.
+                                         # Keep in mind that it not a persistent change so you have to put that command
+                                         # into a rc/systemd state or modify the grub setting the "transparent_hugepage=never" option
+                                         # and reloading the grub config
+  include:                  # Will setup the following lines:
+    - /path/to/local.conf   # include /path/to/local.conf
+    - /path/to/other.conf   # include /path/to/other.conf
   root_dir: /var/lib/redis
   user: redis
   port: 6379
@@ -7,6 +15,8 @@ redis:
     - '900 1'
     - '300 10'
     - '60  10000'
+  extra_opts:
+    supervised: systemd
 
   lookup:
     svc_state: running
@@ -14,3 +24,59 @@ redis:
     pkg_name: redis-server
     svc_name: redis-server
     overcommit_memory: True
+
+#
+# Redis Sentinel Pillar
+#
+  sentinel:
+
+    # The serice can be enabled or disabled if needed
+    enabled: True
+
+    # To setup the configuration, you can either specify the salt:// source path
+    source_path: salt://hostname/redis-sentinel.conf
+
+    # or the options (most of them are setup by default)
+    bind: '127.0.0.1 192.168.1.1' # keep in mind: https://github.com/antirez/redis/issues/3416
+                                  # with: bind: '0.0.0.0' works
+    protected-mode: 'no'
+    port: 26379
+    announce-ip: 1.1.1.1
+    announce-port: 26379
+    dir: '/var/lib/redis'
+
+    # Options not explicitely defined in the template can be added with the following option
+    extra_opts:
+      maxclients: 1000
+
+    # List of masters to monitor
+    masters:
+
+      # More complex configuration
+      mymaster:
+        ip: 127.0.0.1
+        port: 6379
+        quorum: 2
+        down-after-milliseconds: 6000
+        failover-timeout: 180000
+        parallel-syncs: 1
+        auth-pass: supersecret
+        notification-script:
+          path: /var/redis/notify.sh
+          source_path: salt://hostname/notify.sh
+        client-reconfig-script:
+          path: /var/redis/localscript.sh
+        # Extra options for masters can be defined with the following option:
+        extra_opts:
+          opt1: value1 # will create the line: sentinel mymaster2 opt1 value1
+
+      # Simple example
+      mymaster2:
+        ip: 2.2.2.2
+        port: 6379
+        quorum: 3
+
+      # Even more simple example
+      # default port is 6379 and default quorum is 2
+      mymaster3:
+        ip: 3.3.3.3

@@ -32,6 +32,9 @@ Install redis and start up the service ( Ubuntu + RedHat based systems should wo
 
 For a list of all available options, look at: `redis/files/redis-{version}.conf.jinja` - also have a look at the pillar.example and map.jinja.
 
+``redis.sentinel``
+------------------
+Install redis sentinel. Compatible with Ubuntu 14/16 and CentOS 6/7.
 
 Testing
 =======

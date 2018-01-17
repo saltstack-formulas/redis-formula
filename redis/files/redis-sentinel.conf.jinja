@@ -1,0 +1,62 @@
+#
+# This file is managed by salt. Do not edit by hand.
+#
+
+{%- from "redis/map.jinja" import redis_settings with context %}
+
+{%- if redis_settings.sentinel.daemonize is defined %}
+daemonize {{ redis_settings.sentinel.daemonize }}
+{%- endif %}
+{%- if redis_settings.sentinel.pidfile is defined %}
+pidfile {{ redis_settings.sentinel.pidfile }}
+{%- endif %}
+{%- if redis_settings.sentinel.bind is defined %}
+bind {{ redis_settings.sentinel.bind }}
+{%- endif %}
+{%- if redis_settings.sentinel['protected-mode'] is defined %}
+protected-mode {{ redis_settings.sentinel['protected-mode'] }}
+{%- endif %}
+port {{ redis_settings.sentinel.port }}
+logfile {{ redis_settings.sentinel_logfile }}
+{%- if redis_settings.sentinel['announce-ip'] is defined %}
+announce-ip {{ redis_settings.sentinel['announce-ip'] }}
+{%- endif %}
+{%- if redis_settings.sentinel['announce-port'] is defined %}
+announce-port {{ redis_settings.sentinel['announce-port'] }}
+{%- endif %}
+{%- if redis_settings.sentinel.dir is defined %}
+dir {{ redis_settings.sentinel.dir }}
+{%- endif %}
+{%- if redis_settings.sentinel.masters is defined %}
+{%- for master,master_options in redis_settings.sentinel.masters.items() %}
+sentinel monitor {{ master }} {{ master_options.ip }} {{ master_options.port|default('6379') }} {{ master_options.quorum|default('2') }}
+{%- if master_options['down-after-milliseconds'] is defined %}
+sentinel down-after-milliseconds {{ master }} {{ master_options['down-after-milliseconds'] }}
+{%- endif %}
+{%- if  master_options['failover-timeout'] is defined %}
+sentinel failover-timeout {{ master }} {{ master_options['failover-timeout'] }}
+{%- endif %}
+{%- if master_options['parallel-syncs'] is defined %}
+sentinel parallel-syncs {{ master }} {{ master_options['parallel-syncs'] }}
+{%- endif %}
+{%- if master_options['auth-pass'] is defined %}
+sentinel auth-pass {{ master }} {{ master_options['auth-pass'] }}
+{%- endif %}
+{%- if master_options['notification-script'] is defined and master_options['notification-script'].path is defined %}
+sentinel notification-script {{ master }} {{ master_options['notification-script'].path }}
+{%- endif %}
+{%- if master_options['client-reconfig-script'] is defined and master_options['client-reconfig-script'].path is defined %}
+sentinel client-reconfig-script {{ master }} {{ master_options['client-reconfig-script'].path }}
+{%- endif %}
+{%- if master_options.extra_opts is defined %}
+{%- for option,value in master_options.extra_opts.items() %}
+sentinel {{ master }} {{ option }} {{ value }}
+{%- endfor %}
+{%- endif %}
+{%- endfor %}
+{%- endif %}
+{%- if redis_settings.sentinel.extra_opts is defined %}
+{%- for option,value in redis_settings.sentinel.extra_opts.items() %}
+{{ option }} {{ value }}
+{%- endfor %}
+{%- endif %}

@@ -25,12 +25,14 @@ redis:
     svc_name: redis-server
     overcommit_memory: True
 
+  source_path: salt://redis/files/redis-3.2-ng.conf.jinja # To use the new more structured template, add this to the pillar
+
 #
 # Redis Sentinel Pillar
 #
   sentinel:
 
-    # The serice can be enabled or disabled if needed
+    # The service can be enabled or disabled if needed
     enabled: True
 
     # To setup the configuration, you can either specify the salt:// source path

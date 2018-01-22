@@ -90,6 +90,12 @@ auto-aof-rewrite-min-size {{ redis_settings.auto_aof_rewrite_min_size }}
 slowlog-log-slower-than {{ redis_settings.slowlog_log_slower_than }}
 slowlog-max-len {{ redis_settings.slowlog_max_len }}
 
+{%- if redis_settings.extra_opts is defined %}
+{%- for option,value in redis_settings.extra_opts.items() %}
+{{ option }} {{ value }}
+{%- endfor %}
+{%- endif %}
+
 ################################ VIRTUAL MEMORY ###############################
 
 ### WARNING! Virtual Memory is deprecated in Redis 2.4

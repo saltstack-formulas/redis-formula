@@ -146,6 +146,12 @@ latency-monitor-threshold {{ redis_settings.latency_monitor_threshold }}
 
 notify-keyspace-events {{ redis_settings.notify_keyspace_events }}
 
+{%- if redis_settings.extra_opts is defined %}
+{%- for option,value in redis_settings.extra_opts.items() %}
+{{ option }} {{ value }}
+{%- endfor %}
+{%- endif %}
+
 ############################### ADVANCED CONFIG ###############################
 
 hash-max-ziplist-entries 512

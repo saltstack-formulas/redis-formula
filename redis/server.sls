@@ -79,7 +79,11 @@ redis_config:
   file.managed:
     - name: {{ cfg_name }}
     - template: jinja
+{% if redis_settings.source_path is not defined %}
     - source: salt://redis/files/redis-{{ cfg_version }}.conf.jinja
+{% else %}
+    - source: {{ redis_settings.source_path }}
+{% endif %}
 
 {% if install_from == 'source' %}
 redis-initd:
@@ -96,6 +100,12 @@ redis-initd:
       - file: redis_service
 {% endif %}
 
+{% if redis_settings.disable_transparent_huge_pages is defined and redis_settings.disable_transparent_huge_pages %}
+redis_disable_transparent_huge_pages:
+    cmd.run:
+        - name: echo "never" > /sys/kernel/mm/transparent_hugepage/enabled
+
+{% endif %}
 redis_service:
   service.{{ svc_state }}:
     {% if install_from == 'source' %}

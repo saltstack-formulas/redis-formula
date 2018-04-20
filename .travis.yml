@@ -1,0 +1,11 @@
+sudo: required
+cache: bundler
+language: ruby
+
+services:
+  - docker
+
+before_install:
+  - bundle install
+
+script: bundle exec kitchen verify

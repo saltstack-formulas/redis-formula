@@ -1,0 +1,45 @@
+# -*- coding: utf-8 -*-
+# vim: ft=yaml
+Debian:
+  pkg_name: redis-server
+  python_dev_package: python-dev
+  svc_name: redis-server
+  cfg_name: /etc/redis/redis.conf
+  cfg_version: '3.2'
+  logfile: /var/log/redis/redis-server.log
+  pidfile: /var/run/redis/redis-server.pid
+  sentinel_pkg: redis-server
+  sentinel_service: redis-sentinel
+  sentinel_cfg: /etc/redis/sentinel.conf
+  sentinel_logfile: /var/log/redis/redis-sentinel.log
+RedHat:
+  pkg_name: redis
+  python_dev_package: python-devel
+  svc_name: redis
+  cfg_name: /etc/redis.conf
+  cfg_version: '3.0'
+  logfile: /var/log/redis/redis.log
+  pidfile: /var/run/redis.pid
+  sentinel_pkg: redis
+  sentinel_service: redis-sentinel
+  sentinel_cfg: /etc/redis-sentinel.conf
+  sentinel_logfile: /var/log/redis/sentinel.log
+  sentinel:
+    pidfile: /var/run/redis/sentinel.pid
+Arch:
+  pkg_name: redis
+  svc_name: redis
+  cfg_name: /etc/redis.conf
+  cfg_version: '3.0'
+  logfile: /var/log/redis/redis.log
+  pidfile: /var/run/redis.pid
+  daemonize: no
+FreeBSD:
+  pkg_name: redis
+  svc_name: redis
+  cfg_name: /usr/local/etc/redis.conf
+  cfg_version: '3.0'
+  logfile: /var/log/redis/redis.log
+  pidfile: /var/run/redis.pid
+  overcommit_memory: False
+

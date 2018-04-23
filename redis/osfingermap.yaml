@@ -9,7 +9,7 @@ CentOS Linux-7:
   cfg_version: '3.2'
   sentinel:
     group: root
-    damonize: 'no'
+    daemonize: 'no'
 CentOS-6:
   sentinel:
     group: root

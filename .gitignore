@@ -2,3 +2,6 @@
 *.swp
 *.swo
 *~
+.bundle
+vendor
+Gemfile.lock

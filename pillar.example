@@ -4,9 +4,9 @@ redis:
                                          # Keep in mind that it not a persistent change so you have to put that command
                                          # into a rc/systemd state or modify the grub setting the "transparent_hugepage=never" option
                                          # and reloading the grub config
-  include:                  # Will setup the following lines:
-    - /path/to/local.conf   # include /path/to/local.conf
-    - /path/to/other.conf   # include /path/to/other.conf
+  # include:                  # Will setup the following lines:
+  #   - /path/to/local.conf   # include /path/to/local.conf
+  #   - /path/to/other.conf   # include /path/to/other.conf
   root_dir: /var/lib/redis
   user: redis
   port: 6379
@@ -14,9 +14,9 @@ redis:
   snapshots:
     - '900 1'
     - '300 10'
-    - '60  10000'
-  extra_opts:
-    supervised: systemd
+    - '60 10000'
+  # extra_opts:
+  #   supervised: systemd
 
   lookup:
     svc_state: running
@@ -25,7 +25,7 @@ redis:
     svc_name: redis-server
     overcommit_memory: True
 
-  source_path: salt://redis/files/redis-3.2-ng.conf.jinja # To use the new more structured template, add this to the pillar
+  # source_path: salt://redis/files/redis-3.2-ng.conf.jinja # To use the new more structured template, add this to the pillar
 
 #
 # Redis Sentinel Pillar

@@ -1,0 +1,15 @@
+# -*- coding: utf-8 -*-
+# vim: ft=yaml
+Debian-7:
+  cfg_version: '2.4'
+Ubuntu-16.04:
+  cfg_version: '3.0'
+  sentinel_pkg: redis-sentinel
+CentOS Linux-7:
+  cfg_version: '3.2'
+  sentinel:
+    group: root
+    daemonize: 'no'
+CentOS-6:
+  sentinel:
+    group: root

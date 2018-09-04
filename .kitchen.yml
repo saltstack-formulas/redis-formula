@@ -1,10 +1,36 @@
 ---
 driver:
-  name: vagrant
+  name: docker
+
+driver_config:
+  use_sudo: false
+  privileged: true
+  provision_command: mkdir -p /run/sshd
+  run_command: /lib/systemd/systemd
+
+platforms:
+  - name: debian-9
+    driver_config:
+      provision_command:
+        - apt-get install -y udev net-tools locales && locale-gen en_US.UTF-8
+  - name: ubuntu-16.04
+    driver_config:
+      provision_command:
+        - apt-get install -y udev net-tools locales && locale-gen en_US.UTF-8
+  - name: centos-7
+    driver_config:
+      provision_command:
+        - yum install -y udev net-tools locales
 
 provisioner:
   name: salt_solo
+  log_level: info
+  require_chef: false
+  salt_version: latest
   formula: redis
+  salt_copy_filter:
+    - .kitchen
+    - .git
   pillars-from-files:
     redis.sls: pillar.example
   pillars:
@@ -18,8 +44,13 @@ provisioner:
         - redis
         - redis.server
 
-platforms:
-  - name: ubuntu-14.04-i386
+verifier:
+  name: inspec
+  sudo: false
+  # cli, documentation, html, progress, json, json-min, json-rspec, junit
+  reporter: cli
+  inspec_tests:
+    - path: test/integration/default
 
 suites:
   - name: default

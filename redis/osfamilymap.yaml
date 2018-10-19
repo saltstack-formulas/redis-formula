@@ -40,7 +40,7 @@ FreeBSD:
   cfg_name: /usr/local/etc/redis.conf
   cfg_version: '3.0'
   logfile: /var/log/redis/redis.log
-  pidfile: /var/run/redis.pid
+  pidfile: /var/run/redis/redis.pid
   overcommit_memory: False
   root_dir: /var/db/redis
 

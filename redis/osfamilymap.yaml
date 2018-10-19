@@ -42,4 +42,5 @@ FreeBSD:
   logfile: /var/log/redis/redis.log
   pidfile: /var/run/redis.pid
   overcommit_memory: False
+  root_dir: /var/db/redis
 

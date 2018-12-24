@@ -13,7 +13,7 @@ platforms:
     driver_config:
       provision_command:
         - apt-get install -y udev net-tools locales && locale-gen en_US.UTF-8
-  - name: ubuntu-16.04
+  - name: ubuntu-18.04
     driver_config:
       provision_command:
         - apt-get install -y udev net-tools locales && locale-gen en_US.UTF-8
@@ -36,21 +36,22 @@ provisioner:
   pillars:
     top.sls:
       base:
-        "*":
+        '*':
           - redis
-  state_top:
-    base:
-      "*":
-        - redis
-        - redis.server
 
 verifier:
   name: inspec
-  sudo: false
-  # cli, documentation, html, progress, json, json-min, json-rspec, junit
-  reporter: cli
+  sudo: true
+  reporter:
+    - cli
   inspec_tests:
     - path: test/integration/default
 
 suites:
   - name: default
+    provisioner:
+      state_top:
+        base:
+          '*':
+            - redis
+            - redis.server

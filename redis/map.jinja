@@ -5,16 +5,17 @@
 {% import_yaml 'redis/osfamilymap.yaml' as osfamilymap %}
 {% import_yaml 'redis/osfingermap.yaml' as osfingermap %}
 
-{% set redis_settings = salt['grains.filter_by'](
-    defaults,
-    merge = salt['grains.filter_by'](
-        osfamilymap,
-        grain='os_family',
-        merge = salt['grains.filter_by'](
-            osfingermap,
-            grain='osfinger',
-            merge = salt['pillar.get']('redis', {}),
-        ),
-    ),
-    base='redis')
-%}
+{# merge the osfamilymap #}
+{% set osfamily = salt['grains.filter_by'](osfamilymap, grain='os_family') or{} %}
+{% do salt['defaults.merge'](defaults['redis'], osfamily) %}
+
+{# merge the osfingermap #}
+{% set osfinger = salt['grains.filter_by'](osfingermap, grain='osfinger') or {} %}
+{% do salt['defaults.merge'](defaults['redis'], osfinger) %}
+
+{# merge the lookup #}
+{% set lookup = salt['pillar.get']('redis:lookup', default={}, merge=True) %}
+{% do salt['defaults.merge'](defaults['redis'], lookup) %}
+
+{# merge all #}
+{% set redis_settings = salt['pillar.get']('redis', default=defaults['redis'], merge=True) %}

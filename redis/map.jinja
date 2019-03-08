@@ -16,4 +16,4 @@
 ) %}
 
 {#- Merge the redis pillar #}
-{%- set redis = salt['pillar.get']('redis', default=defaults, merge=True) %}
+{%- set redis_settings = salt['pillar.get']('redis', default=defaults, merge=True) %}

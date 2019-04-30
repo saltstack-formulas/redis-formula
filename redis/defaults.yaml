@@ -1,6 +1,15 @@
 # -*- coding: utf-8 -*-
 # vim: ft=yaml
 redis:
+  instances:
+    _default:
+      cfg_name: /etc/redis/redis-{name}.conf
+      svc_name: redis-server@{name}
+      pidfile: /var/run/redis-{name}/redis-server.pid
+      logfile: /var/log/redis/redis-server-{name}.log
+      dbfilename: dump-{name}.rdb
+      svc_state: running
+      svc_onboot: true
   appendfilename: appendonly.aof
   appendonly: 'no'
   appendfsync: everysec

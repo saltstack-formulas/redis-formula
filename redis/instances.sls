@@ -5,6 +5,8 @@ include:
 
 {% set cfg_version       = redis_settings.cfg_version -%}
 {% set install_from      = redis_settings.install_from -%}
+{% set user           = redis_settings.user -%}
+{% set group          = redis_settings.group -%}
 
 redis_systemd_template:
   file.managed:
@@ -21,7 +23,15 @@ redis_systemd_template:
 {%     endfor %}
 {%     do config.update(instance_options) %}
 
-
+redis_root_dir {{ instance_name }}:
+  file.directory:
+    - name: {{ config.root_dir }}
+    - mode: 755
+    - user: {{ user }}
+    - group: {{ group }}
+    - makedirs: True
+    - require_in:
+      - service: redis_service {{ instance_name }}
 
 redis_config {{ instance_name }}:
   file.managed:

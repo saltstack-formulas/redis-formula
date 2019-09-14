@@ -1,5 +1,6 @@
 # -*- coding: utf-8 -*-
 # vim: ft=yaml
+---
 redis:
   appendfilename: appendonly.aof
   appendonly: 'no'
@@ -39,14 +40,14 @@ redis:
     - '300 10'
     - '60 10000'
   stop_writes_on_bgsave_error: 'yes'
-  svc_onboot: True
+  svc_onboot: true
   svc_state: running
   timeout: 0
   tcp_backlog: 511
   tcp_keepalive: 0
   unixsocketperm: 755
   user: redis
-  overcommit_memory: True
+  overcommit_memory: true
   sentinel:
     port: 26379
     dir: /var/lib/redis
@@ -54,4 +55,3 @@ redis:
     group: redis
     pidfile: /var/run/redis/sentinel.pid
     daemonize: 'yes'
-

@@ -7,7 +7,7 @@ control 'redis' do
   tag 'redis', 'package'
 
   case os[:family]
-  when 'redhat'
+  when 'redhat', 'fedora'
     redis_service = 'redis'
   when 'debian'
     redis_service = 'redis-server'

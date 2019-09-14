@@ -1,9 +1,14 @@
+# -*- coding: utf-8 -*-
+# vim: ft=yaml
+---
 redis:
-  disable_transparent_huge_pages: True   # If set, it executes: "echo never > /sys/kernel/mm/transparent_hugepage/enabled"
-                                         # as it is recommended for redis deployments.
-                                         # Keep in mind that it not a persistent change so you have to put that command
-                                         # into a rc/systemd state or modify the grub setting the "transparent_hugepage=never" option
-                                         # and reloading the grub config
+  # If set, it executes: "echo never > /sys/kernel/mm/transparent_hugepage/enabled"
+  # as it is recommended for redis deployments.
+  # Keep in mind that it not a persistent change so you have to put that
+  # command into a rc/systemd state or modify the grub setting the
+  # "transparent_hugepage=never" option and reloading the grub config
+  disable_transparent_huge_pages: true
+
   # include:                  # Will setup the following lines:
   #   - /path/to/local.conf   # include /path/to/local.conf
   #   - /path/to/other.conf   # include /path/to/other.conf
@@ -19,35 +24,42 @@ redis:
   #   supervised: systemd
 
   lookup:
+    # These can be overridden but commenting here since used by Kitchen during
+    # the Travis run (breaks numerous platforms)
+    # cfg_name: /etc/redis.conf
+    # pkg_name: redis-server
+    # svc_name: redis-server
     svc_state: running
-    cfg_name: /etc/redis.conf
-    pkg_name: redis-server
-    svc_name: redis-server
-    overcommit_memory: True
+    overcommit_memory: true
 
-  # source_path: salt://redis/files/redis-3.2-ng.conf.jinja # To use the new more structured template, add this to the pillar
+  # To use the new more structured template, add this to the pillar
+  # source_path: salt://redis/files/redis-3.2-ng.conf.jinja
 
-#
-# Redis Sentinel Pillar
-#
+  #
+  # Redis Sentinel Pillar
+  #
   sentinel:
 
     # The service can be enabled or disabled if needed
-    enabled: True
+    enabled: true
 
     # To setup the configuration, you can either specify the salt:// source path
     source_path: salt://hostname/redis-sentinel.conf
 
     # or the options (most of them are setup by default)
-    bind: '127.0.0.1 192.168.1.1' # keep in mind: https://github.com/antirez/redis/issues/3416
-                                  # with: bind: '0.0.0.0' works
+
+    # keep in mind: https://github.com/antirez/redis/issues/3416
+    # with: bind: '0.0.0.0' works
+    bind: '127.0.0.1 192.168.1.1'
+
     protected-mode: 'no'
     port: 26379
     announce-ip: 1.1.1.1
     announce-port: 26379
     dir: '/var/lib/redis'
 
-    # Options not explicitely defined in the template can be added with the following option
+    # Options not explicitely defined in the template can be added with the
+    # following option
     extra_opts:
       maxclients: 1000
 
@@ -70,7 +82,7 @@ redis:
           path: /var/redis/localscript.sh
         # Extra options for masters can be defined with the following option:
         extra_opts:
-          opt1: value1 # will create the line: sentinel mymaster2 opt1 value1
+          opt1: value1  # will create the line: sentinel mymaster2 opt1 value1
 
       # Simple example
       mymaster2:

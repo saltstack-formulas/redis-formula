@@ -1,5 +1,6 @@
 # -*- coding: utf-8 -*-
 # vim: ft=yaml
+---
 Debian:
   pkg_name: redis-server
   python_dev_package: python-dev
@@ -33,7 +34,7 @@ Arch:
   cfg_version: '3.0'
   logfile: /var/log/redis/redis.log
   pidfile: /var/run/redis.pid
-  daemonize: no
+  daemonize: 'no'
 FreeBSD:
   pkg_name: redis
   svc_name: redis
@@ -41,6 +42,5 @@ FreeBSD:
   cfg_version: '3.0'
   logfile: /var/log/redis/redis.log
   pidfile: /var/run/redis/redis.pid
-  overcommit_memory: False
+  overcommit_memory: false
   root_dir: /var/db/redis
-

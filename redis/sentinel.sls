@@ -19,7 +19,7 @@ redis_sentinel_config:
             - service: redis_sentinel_service
 
 {% if redis_settings.sentinel.masters is defined %}
-{%for master,master_opts in redis_settings.sentinel.masters.items() %}
+{% for master,master_opts in redis_settings.sentinel.masters.items() %}
 {% if master_opts['notification-script'] is defined and master_opts['notification-script'].source_path is defined %}
 
 redis_sentinel_{{ master }}_notification_script:

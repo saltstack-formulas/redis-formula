@@ -1,7 +1,7 @@
 {% from "redis/map.jinja" import redis_settings with context %}
 
 
-{% set install_from   = redis_settings.install_from -%} 
+{% set install_from   = redis_settings.install_from -%}
 
 
 {% if install_from == 'source' %}

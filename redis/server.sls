@@ -41,7 +41,7 @@ redis-init-script:
     - name: /etc/init/redis-server.conf
     - template: jinja
     - source: salt://redis/files/upstart.conf.jinja
-    - mode: 0750
+    - mode: '0750'
     - user: root
     - group: root
     - context:
@@ -91,7 +91,7 @@ redis-initd:
     - name: /etc/init.d/redis
     - template: jinja
     - source: salt://redis/files/redis_initd.jinja
-    - mode: 0777
+    - mode: '0777'
     - user: root
     - group: root
     - require:

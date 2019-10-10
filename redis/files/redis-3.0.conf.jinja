@@ -64,8 +64,8 @@ slave-serve-stale-data {{ redis_settings.slave_serve_stale_data }}
 slave-read-only {{ redis_settings.slave_read_only }}
 
 {% if redis_settings.repl_diskless_sync is defined %}
-repl-diskless-sync {{ redis_settings.repl_diskless_sync}}
-repl-diskless-sync-delay {{ redis_settings.repl_diskless_sync_delay}}
+repl-diskless-sync {{ redis_settings.repl_diskless_sync }}
+repl-diskless-sync-delay {{ redis_settings.repl_diskless_sync_delay }}
 {% endif -%}
 
 {% if redis_settings.repl_ping_slave_period is defined %}
@@ -131,12 +131,12 @@ aof-load-truncated {{ redis_settings.aof_load_truncated }}
 lua-time-limit {{ redis_settings.lua_time_limit }}
 
 {% if redis_settings.cluster_enabled is defined %}
-cluster-enabled {{ redis_settings.cluster_enabled}}
-cluster-config-file {{ redis_settings.cluster_config_file}}
-cluster-node-timeout {{ redis_settings.cluster_node_timeout}}
-cluster-slave-validity-factor {{ redis_settings.cluster_slave_validity_factor}}
-cluster-migration-barrier {{ redis_settings.cluster_migration_barrier}}
-cluster-require-full-coverage {{ redis_settings.cluster_require_full_coverage}}
+cluster-enabled {{ redis_settings.cluster_enabled }}
+cluster-config-file {{ redis_settings.cluster_config_file }}
+cluster-node-timeout {{ redis_settings.cluster_node_timeout }}
+cluster-slave-validity-factor {{ redis_settings.cluster_slave_validity_factor }}
+cluster-migration-barrier {{ redis_settings.cluster_migration_barrier }}
+cluster-require-full-coverage {{ redis_settings.cluster_require_full_coverage }}
 {% endif %}
 
 slowlog-log-slower-than {{ redis_settings.slowlog_log_slower_than }}

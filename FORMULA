@@ -1,7 +1,7 @@
 name: redis
 os: Debian, Ubuntu, RedHat, Fedora, CentOS
 os_family: Debian, RedHat
-version: 0.26.0
+version: 0.26.1
 release: 1
 minimum_version: 2017.7
 summary: template formula

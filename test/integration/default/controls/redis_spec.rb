@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 control 'redis' do
   impact 1.0
   title 'Manage Redis Server'

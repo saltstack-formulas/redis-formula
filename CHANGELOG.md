@@ -1,5 +1,18 @@
 # Changelog
 
+## [0.26.2](https://github.com/saltstack-formulas/redis-formula/compare/v0.26.1...v0.26.2) (2019-10-11)
+
+
+### Bug Fixes
+
+* **rubocop:** add fixes using `rubocop --safe-auto-correct` ([](https://github.com/saltstack-formulas/redis-formula/commit/5a9477e))
+
+
+### Continuous Integration
+
+* merge travis matrix, add `salt-lint` & `rubocop` to `lint` job ([](https://github.com/saltstack-formulas/redis-formula/commit/b105002))
+* **travis:** merge `rubocop` linter into main `lint` job ([](https://github.com/saltstack-formulas/redis-formula/commit/f336c60))
+
 ## [0.26.1](https://github.com/saltstack-formulas/redis-formula/compare/v0.26.0...v0.26.1) (2019-10-10)
 
 

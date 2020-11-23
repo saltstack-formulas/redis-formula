@@ -156,8 +156,7 @@ suites:
       state_top:
         base:
           '*':
-            - redis.common
-            - redis.server
+            - redis
       pillars:
         top.sls:
           base:

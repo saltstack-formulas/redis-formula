@@ -4,7 +4,7 @@
 {% set install_from   = redis_settings.install_from -%}
 
 
-{% if install_from == 'source' %}
+{% if install_from in ('source', 'archive') %}
 {% set version = redis_settings.version|default('2.8.8') -%}
 {% set checksum = redis_settings.checksum|default('sha1=aa811f399db58c92c8ec5e48271d307e9ab8eb81') -%}
 {% set root = redis_settings.root|default('/usr/local') -%}
@@ -28,6 +28,7 @@ get-redis:
     - name: {{ root }}/redis-{{ version }}.tar.gz
     - source: http://download.redis.io/releases/redis-{{ version }}.tar.gz
     - source_hash: {{ checksum }}
+    - makedirs: True
     - require:
       - pkg: redis-dependencies
   cmd.wait:
@@ -69,5 +70,39 @@ install-redis:
     - version: {{ redis_settings.version }}
     {% endif %}
 
+    {%- if grains.os_family|lower == 'suse' %}
+        {# this is basically a workaround for faulty packaging #}
+install-redis-log:
+  group.present:
+    - name: {{ redis_settings.group }}
+  user.present:
+    - name: {{ redis_settings.user }}
+    - gid_from_name: True
+    - home: {{ redis_settings.home }}
+    - require:
+      - group: install-redis-log
+  file.directory:
+    - name: /var/log/redis
+    - mode: 755
+    - user: {{ redis_settings.user }}
+    - group: {{ redis_settings.group }}
+    - recurse:
+        - user
+        - group
+        - mode
+    - makedirs: True
+    - require:
+      - user: install-redis-log
+
+install-redis-service:
+  file.replace:
+    - name: /usr/lib/systemd/system/redis@.service
+    - pattern: ^Type=notify
+    - repl: Type=simple
+  cmd.run:
+    - name: systemctl daemon-reload
+    - require:
+      - file: install-redis-log
+    {% endif %}
 
 {% endif %}

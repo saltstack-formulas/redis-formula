@@ -3,17 +3,17 @@ include:
 
 {% from "redis/map.jinja" import redis_settings as r with context %}
 
-    {%- if r.install_from == 'source' %}
+    {%- if r.install_from in ('source', 'archive') %}
 
 redis_user_group:
   group.present:
-    - name: {{ r.group }}g
+    - name: {{ r.group }}
   user.present:
-    - name: {{ r.user }}g
+    - name: {{ r.user }}
     - gid_from_name: True
     - home: {{ r.home }}
     - require:
-      - group: redis_group
+      - group: redis_user_group
   file.managed:
     - name: /etc/init/redis-server.conf
     - template: jinja
@@ -21,9 +21,10 @@ redis_user_group:
     - mode: '0750'
     - user: root
     - group: root
+    - makedirs: True
     - context:
         conf: /etc/redis/redis.conf
-        user: {{ r.user }}g
+        user: {{ r.user }}
         bin: {{ r.bin }}
     - require:
       - sls: redis.common
@@ -32,21 +33,15 @@ redis-log-dir:
   file.directory:
     - name: /var/log/redis
     - mode: 755
-    - user: {{ r.user }}g
-    - group: {{ r.group }}g
+    - user: {{ r.user }}
+    - group: {{ r.group }}
+    - recurse:
+        - user
+        - group
+        - mode
     - makedirs: True
     - require:
       - user: redis_user_group
-
-        {%- if grains['os_family'] == 'Arch' %}
-redis-log-dir:
-  file.directory:
-    - name: /var/log/redis
-    - mode: 755
-    - user: {{ r.user }}
-    - group: {{ r.group }}
-    - makedirs: True
-        {%- endif %}
 
     {%- endif %}
 
@@ -59,8 +54,9 @@ redis_config:
     {% else %}
     - source: {{ r.source_path }}
     {%- endif %}
+    - makedirs: True
 
-    {% if r.install_from == 'source' %}
+    {%- if r.install_from in ('source', 'archive') %}
 redis-initd:
   file.managed:
     - name: /etc/init.d/redis
@@ -79,18 +75,19 @@ redis-initd:
 redis_disable_transparent_huge_pages:
     cmd.run:
         - name: echo "never" > /sys/kernel/mm/transparent_hugepage/enabled
-
     {%- endif %}
+
 redis_service:
   service.{{ r.svc_state }}:
-    {% if r.install_from == 'source' %}
+    {% if r.install_from in ('source', 'archive') %}
     - name: {{ r.svc_name }}_{{ r.port }}
     {% else %}
     - name: {{ r.svc_name }}
     {% endif %}
     - enable: {{ r.svc_onboot }}
     - watch:
-      - file: {{ r.cfg_name }}
+      - file: redis_config
+    - retry: {{ r.retry_option|json }}
 
     {% if r.overcommit_memory == True %}
 redis_overcommit_memory:

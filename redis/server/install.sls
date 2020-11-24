@@ -14,6 +14,8 @@ redis_user_group:
     - home: {{ r.home }}
     - require:
       - group: redis_group
+
+redis-config-file:
   file.managed:
     - name: /etc/init/redis-server.conf
     - template: jinja

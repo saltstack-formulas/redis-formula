@@ -3,7 +3,7 @@ include:
 
 {% from "redis/map.jinja" import redis_settings as r with context %}
 
-    {%- if r.install_from in ('source', 'archive') %}r
+    {%- if r.install_from in ('source', 'archive') %}
 
 redis_user_group:
   group.present:

@@ -50,9 +50,22 @@ Available states
 .. contents::
     :local:
 
+ ``redis``
+^^^^^^^^^^
 
-``redis``
-^^^^^^^^^
+*Meta-state (This is a state that includes other states)*.
+
+This state installs the Redis server solution (see https://redis.io)
+
+``redis.clean``
+^^^^^^^^^^^^^^^^
+
+*Meta-state (This is a state that includes other states)*.
+
+Stop Redis daemon and remove redis server solution.
+
+``redis.common``
+^^^^^^^^^^^^^^^^
 
 Install redis only
 
@@ -73,6 +86,14 @@ For options that aren't in the template (timeout, for example in redis-2.8 templ
 
    extra_opts:
      timeout: 10
+
+
+``redis.server.clean``
+^^^^^^^^^^^^^^^^^^^^^^
+
+*Meta-state (This is a state that includes other states)*.
+
+Stop Redis daemon and remove redis package/archive.
 
 ``redis.sentinel``
 ^^^^^^^^^^^^^^^^^^

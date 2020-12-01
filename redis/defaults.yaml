@@ -19,6 +19,8 @@ redis:
   aof_load_truncated: 'yes'
   bin: /usr/local/bin/redis-server
   bind: 127.0.0.1
+  cfg_name: /etc/redis/redis.conf
+  cfg_version: '3.2'
   database_count: 16
   root_dir: /var/lib/redis
   dbfilename: dump.rdb
@@ -64,3 +66,11 @@ redis:
     group: redis
     pidfile: /var/run/redis/sentinel.pid
     daemonize: 'yes'
+
+  retry_option:
+    # https://docs.saltstack.com/en/latest/ref/states/requisites.html#retrying-states
+    attempts: 3
+    until: true
+    interval: 60
+    splay: 10
+

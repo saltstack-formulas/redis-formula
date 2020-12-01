@@ -5,8 +5,6 @@ Debian:
   pkg_name: redis-server
   python_dev_package: python-dev
   svc_name: redis-server
-  cfg_name: /etc/redis/redis.conf
-  cfg_version: '3.2'
   logfile: /var/log/redis/redis-server.log
   pidfile: /var/run/redis/redis-server.pid
   sentinel_pkg: redis-server
@@ -44,3 +42,18 @@ FreeBSD:
   pidfile: /var/run/redis/redis.pid
   overcommit_memory: false
   root_dir: /var/db/redis
+Suse:
+  cfg_name: /etc/redis/default.conf
+  pkg_name: redis
+  python_dev_package: python-devel
+  svc_name: redis@default
+  logfile: /var/log/redis/default.log
+  pidfile: /var/run/redis/default.pid
+  sentinel_pkg: redis
+  sentinel_service: redis-sentinel
+  sentinel_cfg: /etc/redis-sentinel.conf
+  sentinel_logfile: /var/log/redis/sentinel.log
+  sentinel:
+    pidfile: /var/run/redis/sentinel.pid
+  disable_transparent_huge_pages: true
+  systemd_type: simple

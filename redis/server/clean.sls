@@ -1,16 +1,12 @@
 
-{%- from "redis/map.jinja" import redis_settings with context %}
-{%- set cfg_name          = redis_settings.cfg_name -%}
-{%- set install_from      = redis_settings.install_from -%}
-{%- set svc_name          = redis_settings.svc_name -%}
-{%- set port              = redis_settings.port -%}
+{%- from "redis/map.jinja" import redis_settings as r with context %}
 
 redis-server-service-clean:
   service.dead:
-    {%- if install_from == 'source' %}
-    - name: {{ svc_name }}_{{ port }}
+    {%- if r.install_from in ('source', 'archive') %}
+    - name: {{ r.svc_name }}_{{ r.port }}
     {%- else %}
-    - name: {{ svc_name }}
+    - name: {{ r.svc_name }}
     {%- endif %}
     - enable: false
     - require_in:
@@ -18,27 +14,31 @@ redis-server-service-clean:
       - file: redis-server-clean
 
 redis-server-clean:
-    {%- if install_from == 'source' %}
-        {%- set user = redis_settings.user -%}
-        {%- set group = redis_settings.group -%}
+    {%- if r.install_from in ('source', 'archive') %}
 
   user.absent:
-    - name: {{ user }}
+    - name: {{ r.user }}
   group.absent:
-    - name: {{ group }}
+    - name: {{ r.group }}
     - require:
       - user: redis-server-clean
   file.absent:
     - names:
       - /etc/init/redis-server.conf
-      - /var/log/redis
-      - {{ cfg_name }}
+      - {{ r.cfg_name }}
       - /etc/init.d/redis
-      - {{ redis_settings.root|default('/usr/local') }}
+      - {{ r.root|default('/usr/local') }}
+      - /etc/redis
+      - /var/log/redis
+      - /var/lib/redis
+      - /usr/lib/systemd/system/redis*
+      - /lib/systemd/system/redis*
+      - /var/run/redis
+      - /var/run/redis_6379.pid
 
     {%- else %}
 
   pkg.removed:
-    - name: {{ redis_settings.pkg_name }}
+    - name: {{ r.pkg_name }}
 
     {%- endif %}

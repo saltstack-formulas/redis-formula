@@ -94,3 +94,15 @@ redis:
       # default port is 6379 and default quorum is 2
       mymaster3:
         ip: 3.3.3.3
+
+  # Multiple-instances management.
+  # Note: Tested on debian stretch only.
+  instances:
+    # Special value, if you want to override something for all your instances
+    _default:
+      bind: 0.0.0.0
+    # Now, we define each instance, with its differences
+    cache:
+      port: 6380
+    sessions:
+      port: 6381

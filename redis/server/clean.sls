@@ -29,10 +29,8 @@ redis-server-clean:
       - /etc/init.d/redis
       - {{ r.root|default('/usr/local') }}
       - /etc/redis
-      - /var/log/redis
-      - /var/lib/redis
-      - /usr/lib/systemd/system/redis*
-      - /lib/systemd/system/redis*
+      - {{ r.dir.log }}
+      - {{ r.dir.service }}/redis*
       - /var/run/redis
       - /var/run/redis_6379.pid
 

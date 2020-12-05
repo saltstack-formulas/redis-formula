@@ -73,7 +73,7 @@ redis:
 
   retry_option:
     # https://docs.saltstack.com/en/latest/ref/states/requisites.html#retrying-states
-    attempts: 3
+    attempts: 2
     until: true
     interval: 60
     splay: 10

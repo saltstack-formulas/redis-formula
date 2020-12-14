@@ -3,7 +3,7 @@
 redis-formula
 =============
 
-|img_travis| |img_sr|
+|img_travis| |img_sr| |img_pc|
 
 .. |img_travis| image:: https://travis-ci.com/saltstack-formulas/redis-formula.svg?branch=master
    :alt: Travis CI Build Status
@@ -13,10 +13,15 @@ redis-formula
    :alt: Semantic Release
    :scale: 100%
    :target: https://github.com/semantic-release/semantic-release
+.. |img_pc| image:: https://img.shields.io/badge/pre--commit-enabled-brightgreen?logo=pre-commit&logoColor=white
+   :alt: pre-commit
+   :scale: 100%
+   :target: https://github.com/pre-commit/pre-commit
 
 Formula to install and configure redis.
 
 .. contents:: **Table of Contents**
+   :depth: 1
 
 General notes
 -------------
@@ -39,6 +44,22 @@ Contributing to this repo
 
 Please see `How to contribute <https://github.com/saltstack-formulas/.github/blob/master/CONTRIBUTING.rst>`_ for more details.
 
+pre-commit
+^^^^^^^^^^
+
+`pre-commit <https://pre-commit.com/>`_ is configured for this formula, which you may optionally use to ease the steps involved in submitting your changes.
+First install  the ``pre-commit`` package manager using the appropriate `method <https://pre-commit.com/#installation>`_, then run ``bin/install-hooks`` and
+now ``pre-commit`` will run automatically on each ``git commit``. ::
+
+  $ bin/install-hooks
+  pre-commit installed at .git/hooks/pre-commit
+  pre-commit installed at .git/hooks/commit-msg
+
+Special notes
+-------------
+
+None.
+
 Todo
 ----
 
@@ -48,10 +69,10 @@ Available states
 ----------------
 
 .. contents::
-    :local:
+   :local:
 
- ``redis``
-^^^^^^^^^^
+``redis``
+^^^^^^^^^
 
 *Meta-state (This is a state that includes other states)*.
 
@@ -86,7 +107,6 @@ For options that aren't in the template (timeout, for example in redis-2.8 templ
 
    extra_opts:
      timeout: 10
-
 
 ``redis.server.clean``
 ^^^^^^^^^^^^^^^^^^^^^^
@@ -123,7 +143,7 @@ e.g. ``debian-9-2019-2-py3``.
 ``bin/kitchen converge``
 ^^^^^^^^^^^^^^^^^^^^^^^^
 
-Creates the docker instance and runs the ``template`` main state, ready for testing.
+Creates the docker instance and runs the ``redis`` main states, ready for testing.
 
 ``bin/kitchen verify``
 ^^^^^^^^^^^^^^^^^^^^^^
@@ -144,4 +164,3 @@ Runs all of the stages above in one go: i.e. ``destroy`` + ``converge`` + ``veri
 ^^^^^^^^^^^^^^^^^^^^^
 
 Gives you SSH access to the instance for manual testing.
-

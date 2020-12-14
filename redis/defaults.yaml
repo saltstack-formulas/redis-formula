@@ -73,4 +73,3 @@ redis:
     until: true
     interval: 60
     splay: 10
-

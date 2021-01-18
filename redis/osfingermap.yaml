@@ -1,6 +1,14 @@
 # -*- coding: utf-8 -*-
 # vim: ft=yaml
 ---
+Debian-10:
+  sentinel_pkg: redis-sentinel
+  sentinel:
+    pidfile: /run/sentinel/redis-sentinel.pid
+Debian-9:
+  sentinel_pkg: redis-sentinel
+  sentinel:
+    pidfile: /run/sentinel/redis-sentinel.pid
 Debian-7:
   cfg_version: '2.4'
 Ubuntu-16.04:

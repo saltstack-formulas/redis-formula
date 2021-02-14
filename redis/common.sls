@@ -3,7 +3,6 @@
 
 {% set install_from   = redis_settings.install_from -%}
 
-
 {% if install_from in ('source', 'archive') %}
 {% set version = redis_settings.version|default('2.8.8') -%}
 {% set checksum = redis_settings.checksum|default('sha1=aa811f399db58c92c8ec5e48271d307e9ab8eb81') -%}
@@ -62,6 +61,19 @@ install-redis-service:
 
 {% elif install_from == 'package' %}
 
+{%-   if salt['grains.get']('osfinger', '') in ['Amazon Linux-2'] %}
+redis_epel_repo:
+  pkgrepo.managed:
+    - name: epel
+    - humanname: Extra Packages for Enterprise Linux 7 - $basearch
+    - mirrorlist: https://mirrors.fedoraproject.org/metalink?repo=epel-7&arch=$basearch
+    - enabled: 1
+    - gpgcheck: 1
+    - gpgkey: https://dl.fedoraproject.org/pub/epel/RPM-GPG-KEY-EPEL-7
+    - failovermethod: priority
+    - require_in:
+      - pkg: install-redis
+{%-   endif %}
 
 install-redis:
   pkg.installed:

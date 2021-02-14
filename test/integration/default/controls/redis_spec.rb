@@ -8,14 +8,18 @@ control 'redis' do
   '
   tag 'redis', 'package'
 
-  case os[:family]
-  when 'redhat', 'fedora'
-    redis_service = 'redis'
-  when 'debian'
-    redis_service = 'redis-server'
-  end
+  redis_service =
+    case platform[:family]
+    when 'redhat', 'fedora'
+      'redis'
+    when 'debian'
+      'redis-server'
+    when 'suse'
+      'redis@default'
+    end
 
   describe service(redis_service) do
+    it { should be_installed }
     it { should be_enabled }
     it { should be_running }
   end

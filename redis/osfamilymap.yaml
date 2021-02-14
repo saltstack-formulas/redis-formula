@@ -49,6 +49,7 @@ Suse:
   svc_name: redis@default
   logfile: /var/log/redis/default.log
   pidfile: /var/run/redis/default.pid
+  daemonize: 'no'
   sentinel_pkg: redis
   sentinel_service: redis-sentinel
   sentinel_cfg: /etc/redis-sentinel.conf

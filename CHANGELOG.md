@@ -1,5 +1,23 @@
 # Changelog
 
+## [0.27.1](https://github.com/saltstack-formulas/redis-formula/compare/v0.27.0...v0.27.1) (2021-03-04)
+
+
+### Bug Fixes
+
+* **common:** add inline EPEL repo configuration for Amazon Linux 2 ([6b1c316](https://github.com/saltstack-formulas/redis-formula/commit/6b1c31613ffdf86776a54ab133935de04e47de95))
+* **noise:** only change hugepage state if needed ([cd793f2](https://github.com/saltstack-formulas/redis-formula/commit/cd793f29f363bff95db2cb37ce3d371193eacc62))
+* **suse:** fix for OpenSUSE Leap & Tumbleweed ([9ce0e7f](https://github.com/saltstack-formulas/redis-formula/commit/9ce0e7f780780ceada393250b3ecb6fdc45828a1))
+
+
+### Continuous Integration
+
+* **commitlint:** ensure `upstream/master` uses main repo URL [skip ci] ([c9bde0b](https://github.com/saltstack-formulas/redis-formula/commit/c9bde0b2907a785c12a46b3f733abf2b3d12a724))
+* **gemfile+lock:** use `ssf` customised `kitchen-docker` repo [skip ci] ([05cb8a1](https://github.com/saltstack-formulas/redis-formula/commit/05cb8a1ed84cc84e505d8e5b5740795983318b17))
+* **gitlab-ci:** add `rubocop` linter (with `allow_failure`) [skip ci] ([526d533](https://github.com/saltstack-formulas/redis-formula/commit/526d5338b1623dc7089722e562803862221fd12f))
+* **kitchen+gitlab-ci:** use latest pre-salted images [skip ci] ([889c8f8](https://github.com/saltstack-formulas/redis-formula/commit/889c8f8adca2fdf0cbcf715f3d64ce527f8763b2))
+* **pre-commit:** update hook for `rubocop` [skip ci] ([03bcbcf](https://github.com/saltstack-formulas/redis-formula/commit/03bcbcf3a9713852257376b43a4bc870f29fe151))
+
 # [0.27.0](https://github.com/saltstack-formulas/redis-formula/compare/v0.26.2...v0.27.0) (2020-12-16)
 
 

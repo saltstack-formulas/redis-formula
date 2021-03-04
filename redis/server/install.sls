@@ -74,7 +74,8 @@ redis-initd:
     {% if r.disable_transparent_huge_pages is defined and r.disable_transparent_huge_pages %}
 redis_disable_transparent_huge_pages:
     cmd.run:
-        - name: echo "never" > /sys/kernel/mm/transparent_hugepage/enabled
+      - name: echo "never" > /sys/kernel/mm/transparent_hugepage/enabled
+      - unless: grep -i '^never' /sys/kernel/mm/transparent_hugepage/enabled
     {%- endif %}
 
 redis_service:

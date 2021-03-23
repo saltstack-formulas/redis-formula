@@ -312,6 +312,7 @@ suites:
       state_top:
         base:
           '*':
+            - redis._mapdata
             - redis.common
             - redis.server
       pillars:

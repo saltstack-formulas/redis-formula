@@ -7,10 +7,12 @@ Debian:
   svc_name: redis-server
   logfile: /var/log/redis/redis-server.log
   pidfile: /var/run/redis/redis-server.pid
-  sentinel_pkg: redis-server
+  sentinel_pkg: redis-sentinel
   sentinel_service: redis-sentinel
   sentinel_cfg: /etc/redis/sentinel.conf
   sentinel_logfile: /var/log/redis/redis-sentinel.log
+  sentinel:
+    pidfile: /run/sentinel/redis-sentinel.pid
 RedHat:
   pkg_name: redis
   python_dev_package: python-devel

@@ -1,5 +1,23 @@
 # Changelog
 
+## [0.27.2](https://github.com/saltstack-formulas/redis-formula/compare/v0.27.1...v0.27.2) (2021-04-02)
+
+
+### Bug Fixes
+
+* **debian:** install/configure sentinel on stretch/buster ([cba4fbe](https://github.com/saltstack-formulas/redis-formula/commit/cba4fbe067627285cab8a2f7028ffdfd032dd045))
+* **debian:** optimize code for deletion ([a4a5d3c](https://github.com/saltstack-formulas/redis-formula/commit/a4a5d3cf1639659822d657bc3137b5600ab2a2fd))
+
+
+### Continuous Integration
+
+* **kitchen+ci:** use latest pre-salted images (after CVE) [skip ci] ([4b3644c](https://github.com/saltstack-formulas/redis-formula/commit/4b3644ca8a966983ae2fa8da466c7c86a59355b4))
+
+
+### Tests
+
+* standardise use of `share` suite & `_mapdata` state [skip ci] ([de567a6](https://github.com/saltstack-formulas/redis-formula/commit/de567a6b49d84ac5fabb391dab642029c9540abe))
+
 ## [0.27.1](https://github.com/saltstack-formulas/redis-formula/compare/v0.27.0...v0.27.1) (2021-03-04)
 
 

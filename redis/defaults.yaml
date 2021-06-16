@@ -11,6 +11,9 @@ redis:
       dbfilename: dump-{name}.rdb
       svc_state: running
       svc_onboot: true
+  dir:
+    log: /var/log/redis
+    service: /lib/systemd/system
   appendfilename: appendonly.aof
   appendonly: 'no'
   appendfsync: everysec
@@ -52,6 +55,7 @@ redis:
     - '60 10000'
   stop_writes_on_bgsave_error: 'yes'
   svc_onboot: true
+  svc_name: redis
   svc_state: running
   timeout: 0
   tcp_backlog: 511
@@ -69,7 +73,7 @@ redis:
 
   retry_option:
     # https://docs.saltstack.com/en/latest/ref/states/requisites.html#retrying-states
-    attempts: 3
+    attempts: 2
     until: true
     interval: 60
     splay: 10

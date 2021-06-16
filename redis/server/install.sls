@@ -78,6 +78,21 @@ redis_disable_transparent_huge_pages:
       - unless: grep -i '^never' /sys/kernel/mm/transparent_hugepage/enabled
     {%- endif %}
 
+    {%- if grains.os_family|lower == 'arch' %}
+redis_service_simple:
+  file.replace:
+    - name: {{ r.dir.service }}/redis.service
+    - pattern: Type=notify
+    - repl: Type=simple
+    - onlyif: test -f {{ r.dir.service }}/redis.service
+    - require_in:
+      - service: redis_service
+  cmd.run:
+    - name: systemctl daemon-reload
+    - onchanges:
+      - file: redis_service_simple
+    {%- endif %}
+
 redis_service:
   service.{{ r.svc_state }}:
     {% if r.install_from in ('source', 'archive') %}

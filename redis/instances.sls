@@ -10,7 +10,7 @@ include:
 
 redis_systemd_template:
   file.managed:
-  - name: /lib/systemd/system/redis-server@.service
+  - name: {{ redis_settings.dir.service }}/redis-server@.service
   - replace: False
   - source: salt://redis/files/redis-server@.service
 

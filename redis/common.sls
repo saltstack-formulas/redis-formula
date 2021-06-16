@@ -37,7 +37,6 @@ get-redis:
     - watch:
       - file: get-redis
 
-
 make-and-install-redis:
   cmd.wait:
     - cwd: {{ root }}/redis-{{ version }}
@@ -82,10 +81,9 @@ install-redis:
     - version: {{ redis_settings.version }}
     - ignore_epoch: True
     {% endif %}
+{% endif %}
 
-    {%- if grains.os_family|lower == 'suse' %}
-        {# this is basically a workaround for faulty packaging #}
-install-redis-log:
+install-redis-user-group:
   group.present:
     - name: {{ redis_settings.group }}
   user.present:
@@ -93,9 +91,13 @@ install-redis-log:
     - gid_from_name: True
     - home: {{ redis_settings.home }}
     - require:
-      - group: install-redis-log
+      - group: install-redis-user-group
+    - require_in:
+      - file: install-redis-log-dir
+
+install-redis-log-dir:
   file.directory:
-    - name: /var/log/redis
+    - name: {{ redis_settings.dir.log }}
     - mode: 755
     - user: {{ redis_settings.user }}
     - group: {{ redis_settings.group }}
@@ -104,18 +106,14 @@ install-redis-log:
         - group
         - mode
     - makedirs: True
-    - require:
-      - user: install-redis-log
 
 install-redis-service:
   file.replace:
-    - name: /usr/lib/systemd/system/redis@.service
+    - name: {{ redis_settings.dir.service }}/{{ redis_settings.svc_name }}
     - pattern: ^Type=notify
     - repl: Type=simple
+    - onlyif: test -f {{ redis_settings.dir.service }}/{{ redis_settings.svc_name }}
   cmd.run:
     - name: systemctl daemon-reload
-    - require:
-      - file: install-redis-log
-    {% endif %}
-
-{% endif %}
+    - onchanges:
+      - file: install-redis-log-dir

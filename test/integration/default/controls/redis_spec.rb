@@ -9,8 +9,8 @@ control 'redis' do
   tag 'redis', 'package'
 
   redis_service =
-    case platform[:family]
-    when 'redhat', 'fedora'
+    case system.platform[:family]
+    when 'redhat', 'fedora', 'arch'
       'redis'
     when 'debian'
       'redis-server'

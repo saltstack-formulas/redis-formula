@@ -83,12 +83,14 @@ install-redis:
     {% endif %}
 {% endif %}
 
+    {%- if grains.os_family|lower == 'suse' %}
+        {# this is basically a workaround for faulty packaging #}
 install-redis-user-group:
   group.present:
     - name: {{ redis_settings.group }}
   user.present:
     - name: {{ redis_settings.user }}
-    - gid_from_name: True
+    - usergroup: True
     - home: {{ redis_settings.home }}
     - require:
       - group: install-redis-user-group
@@ -109,11 +111,12 @@ install-redis-log-dir:
 
 install-redis-service:
   file.replace:
-    - name: {{ redis_settings.dir.service }}/{{ redis_settings.svc_name }}
+    - name: {{ redis_settings.dir.service }}/redis@.service
     - pattern: ^Type=notify
     - repl: Type=simple
-    - onlyif: test -f {{ redis_settings.dir.service }}/{{ redis_settings.svc_name }}
+    - onlyif: test -f {{ redis_settings.dir.service }}/redis@.service
   cmd.run:
     - name: systemctl daemon-reload
     - onchanges:
       - file: install-redis-log-dir
+    {%- endif %}

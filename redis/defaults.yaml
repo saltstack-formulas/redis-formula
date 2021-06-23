@@ -13,7 +13,7 @@ redis:
       svc_onboot: true
   dir:
     log: /var/log/redis
-    service: /lib/systemd/system
+    service: /usr/lib/systemd/system
   appendfilename: appendonly.aof
   appendonly: 'no'
   appendfsync: everysec

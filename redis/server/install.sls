@@ -10,7 +10,7 @@ redis_user_group:
     - name: {{ r.group }}
   user.present:
     - name: {{ r.user }}
-    - gid_from_name: True
+    - usergroup: True
     - home: {{ r.home }}
     - require:
       - group: redis_user_group

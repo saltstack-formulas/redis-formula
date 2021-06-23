@@ -45,7 +45,6 @@ Suse:
   cfg_name: /etc/redis/default.conf
   pkg_name: redis
   python_dev_package: python-devel
-  svc_name: redis@default
   logfile: /var/log/redis/default.log
   pidfile: /var/run/redis/default.pid
   daemonize: 'no'
@@ -55,4 +54,5 @@ Suse:
   sentinel_logfile: /var/log/redis/sentinel.log
   sentinel:
     pidfile: /var/run/redis/sentinel.pid
+  svc_name: redis@default
   disable_transparent_huge_pages: true

@@ -1,5 +1,26 @@
 # Changelog
 
+# [0.28.0](https://github.com/saltstack-formulas/redis-formula/compare/v0.27.2...v0.28.0) (2021-06-24)
+
+
+### Bug Fixes
+
+* **archlinux:** systemd requires type=simple ([908bf60](https://github.com/saltstack-formulas/redis-formula/commit/908bf609a74ae6eab79b878bdd15ca0fc8294e27))
+* **defaults:** use lhs lib dir ([7a7cc4a](https://github.com/saltstack-formulas/redis-formula/commit/7a7cc4afba7510beab152bfec0ea7e389193138e))
+
+
+### Continuous Integration
+
+* **gitlab-ci:** enable Arch Linux [skip ci] ([8a8a71d](https://github.com/saltstack-formulas/redis-formula/commit/8a8a71dc9bcfb918edbe28c16f40cfc3e1e3d6ef))
+* **kitchen+gitlab:** adjust matrix to add `3003` [skip ci] ([ea7db6d](https://github.com/saltstack-formulas/redis-formula/commit/ea7db6dbb2a290cdcc0df324bec2a71bef02a62f))
+* **kitchen+gitlab:** remove Ubuntu 16.04 & Fedora 32 (EOL) [skip ci] ([3b5d2f7](https://github.com/saltstack-formulas/redis-formula/commit/3b5d2f74d2ed88dd8d26a21ad55c69cba8885d3b))
+* add `arch-master` to matrix and update `.travis.yml` [skip ci] ([71d420f](https://github.com/saltstack-formulas/redis-formula/commit/71d420f5103794df2bd9282fb13d13b9674d6c5c))
+
+
+### Features
+
+* **arch:** add support for archlinux ([02c1d2f](https://github.com/saltstack-formulas/redis-formula/commit/02c1d2f48ba7a6ac9b19f1799bd662fe2739487b))
+
 ## [0.27.2](https://github.com/saltstack-formulas/redis-formula/compare/v0.27.1...v0.27.2) (2021-04-02)
 
 

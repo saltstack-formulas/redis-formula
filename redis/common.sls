@@ -30,28 +30,28 @@ get-redis:
     - makedirs: True
     - require:
       - pkg: redis-dependencies
-  cmd.wait:
+  cmd.run:
     - cwd: {{ root }}
     - names:
       - tar -zxvf {{ root }}/redis-{{ version }}.tar.gz -C {{ root }} >/dev/null
-    - watch:
+    - onchanges:
       - file: get-redis
 
 make-and-install-redis:
-  cmd.wait:
+  cmd.run:
     - cwd: {{ root }}/redis-{{ version }}
     - names:
       - make >/dev/null 2>&1
       - make install >/dev/null 2>&1
-    - watch:
+    - onchanges:
       - cmd: get-redis
 
 install-redis-service:
-  cmd.wait:
+  cmd.run:
     - cwd: {{ root }}/redis-{{ version }}
     - names:
       - echo -n | utils/install_server.sh
-    - watch:
+    - onchanges:
       - cmd: get-redis
       - cmd: make-and-install-redis
     - require:

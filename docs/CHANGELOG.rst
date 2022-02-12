@@ -2,6 +2,30 @@
 Changelog
 =========
 
+`0.28.1 <https://github.com/saltstack-formulas/redis-formula/compare/v0.28.0...v0.28.1>`_ (2022-02-12)
+----------------------------------------------------------------------------------------------------------
+
+Code Refactoring
+^^^^^^^^^^^^^^^^
+
+
+* **salt-lint:** fix violations (\ `eef0cf1 <https://github.com/saltstack-formulas/redis-formula/commit/eef0cf1b6e982ab530469b0418a63231687d70ed>`_\ )
+
+Continuous Integration
+^^^^^^^^^^^^^^^^^^^^^^
+
+
+* update linters to latest versions [skip ci] (\ `45e625e <https://github.com/saltstack-formulas/redis-formula/commit/45e625e8f332b301baf84c1b7e988ae7f40f80eb>`_\ )
+* **3003.1:** update inc. AlmaLinux, Rocky & ``rst-lint`` [skip ci] (\ `fea9e42 <https://github.com/saltstack-formulas/redis-formula/commit/fea9e42f3ef7141763f49459f92d3f43a192fa80>`_\ )
+* **gemfile:** allow rubygems proxy to be provided as an env var [skip ci] (\ `a458500 <https://github.com/saltstack-formulas/redis-formula/commit/a458500d99a786c78d8a93690429ec4c850d797b>`_\ )
+* **gemfile+lock:** use ``ssf`` customised ``inspec`` repo [skip ci] (\ `d272d1a <https://github.com/saltstack-formulas/redis-formula/commit/d272d1a2c1b9139c17797ad711ff1edc7f57b7cb>`_\ )
+* **kitchen:** move ``provisioner`` block & update ``run_command`` [skip ci] (\ `6b0f151 <https://github.com/saltstack-formulas/redis-formula/commit/6b0f15127b8e5df3afef7310d1a0c44e3f019c62>`_\ )
+* **kitchen+ci:** update with ``3004`` pre-salted images/boxes [skip ci] (\ `c16bbca <https://github.com/saltstack-formulas/redis-formula/commit/c16bbca6dce3d36a46fcfb4a72868dad6ed827d5>`_\ )
+* **kitchen+ci:** update with latest ``3003.2`` pre-salted images [skip ci] (\ `3a6f8c2 <https://github.com/saltstack-formulas/redis-formula/commit/3a6f8c263fdc95b909e85d097041817848dcbd0a>`_\ )
+* **kitchen+ci:** update with latest CVE pre-salted images [skip ci] (\ `c0eae92 <https://github.com/saltstack-formulas/redis-formula/commit/c0eae926d7870fc6078c0cbdad809e322a4c29ba>`_\ )
+* **kitchen+gitlab:** update for new pre-salted images [skip ci] (\ `25fc44b <https://github.com/saltstack-formulas/redis-formula/commit/25fc44ba67d8d2c3c8e216eb1569f5e131b5de47>`_\ )
+* add Debian 11 Bullseye & update ``yamllint`` configuration [skip ci] (\ `c6fe7cb <https://github.com/saltstack-formulas/redis-formula/commit/c6fe7cbdabfaf2ee0be91e45dd4d0e1816b3cf3d>`_\ )
+
 `0.28.0 <https://github.com/saltstack-formulas/redis-formula/compare/v0.27.2...v0.28.0>`_ (2021-06-24)
 ----------------------------------------------------------------------------------------------------------
 
